@@ -1,0 +1,499 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<Zusi>
+ <AutorEintrag AutorID="134" AutorName="Wolfgang Evers" AutorEmail="Wolfgang.Evers@TH-Koeln.de"/>
+<!-- 0 Dampflokomotiven -->
+<!-- 1 Elektrolokomotiven -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\101Familie\DB_101_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektroloks\101\101.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\101Familie\DB_101_nett_hier.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektroloks\101\101.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\101Familie\DB_101_zusi.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektroloks\101\101.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\101Familie\DB_101_zusi2.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektroloks\101\101.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\103\DB_103_rb.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\103\DB_103_r.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\103\DB_103_2rb.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\103\DB_103_2rb_abgebuegelt.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\103\DB_103_109.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_110k_ab.lok">
+  <FahrzeugInfo IDHaupt="14" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_110k_tb.lok">
+  <FahrzeugInfo IDHaupt="4" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_110k_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_110b_ab.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_110b_ab_Schuerze.lok">
+  <FahrzeugInfo IDHaupt="16" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_110b_tb.lok">
+  <FahrzeugInfo IDHaupt="11" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_110b_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\111\DB_111_sch_tb.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\111\111.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\111\DB_111_I60R_s.lok">
+  <FahrzeugInfo IDHaupt="7" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\111\111.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\111\DB_111_PZB90_tb.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\111\111.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\111\DB_111_PZB90_s.lok">
+  <FahrzeugInfo IDHaupt="8" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\111\111.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\111\DB_111_PZB90_vr.lok">
+  <FahrzeugInfo IDHaupt="10" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\111\111.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\143Familie\DB_112_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\DDR\212_243\212.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_113_rb.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.12.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_113_rb_Schuerze.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="2" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.12.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_113_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E10.12.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\120\DB_120_0.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\120\120.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\120\DB_120_vr.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\120\120.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_140_ag.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E40.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_140_tb.lok">
+  <FahrzeugInfo IDHaupt="20" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E40.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_140_vr.lok">
+  <FahrzeugInfo IDHaupt="5" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E40.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_141_ag.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E41.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_141_248.lok">
+  <FahrzeugInfo IDHaupt="10" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E41.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_141_tb.lok">
+  <FahrzeugInfo IDHaupt="4" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E41.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_141_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E41.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\143Familie\DB_143_PZB90_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\DDR\212_243\243.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\101Familie\TXL_145.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektroloks\TRAXX\145-146_0.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\101Familie\DB_146_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektroloks\TRAXX\145-146_0.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_150_ag.lok">
+  <FahrzeugInfo IDHaupt="7" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E50.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\Einheitsloks\DB_150_vr.lok">
+  <FahrzeugInfo IDHaupt="6" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E50.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\151\DB_151_ag.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\151\151.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\151\DB_151_MFA_ag.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\151\151.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\151\DB_151_tb.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\151\151.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\151\DB_151_MFA_tb.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\151\151.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\151\DB_151_MFA_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Elektroloks\BRD\151\151.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\181\DB_181_ab.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E310\181.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\181\DB_181_tb.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E310\181.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\E94\DB_E94_ag.lok">
+  <FahrzeugInfo IDHaupt="7" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\Einheitsloks\E50.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Oesterreich\1044\OeBB1044_084.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="2" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Oesterreich\Epoche4\Elektroloks\1044\1044_1144.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Oesterreich\1044\OeBB1044_240.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="3" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Oesterreich\Epoche4\Elektroloks\1044\1044_1144.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Oesterreich\1044\OeBB1044_275.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="6" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Oesterreich\Epoche4\Elektroloks\1044\1044_1144.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Schweiz\Elektroloks\Re420\SBB_Re421_Cargo_PZB.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Schweiz\Epoche3\Elektroloks\Re_4-4_II\Re_4-4_II.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- 2 Diesellokomotiven -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\V100_DB\DB_211_or.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V100_Familie\V100.10.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\V100_DB\DB_212_ar.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V100_Familie\V100.20.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\V100_DB\DB_212_tb.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V100_Familie\V100.20.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\216Familie\215\DB_215_ar.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V160_Familie\215\215.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\216Familie\215\DB_215_ar_LG.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V160_Familie\215\215.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\216Familie\215\DB_215_tb.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V160_Familie\215\215.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\216Familie\215\DB_215_or.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V160_Familie\215\215.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\216Familie\216\DB_216_ar.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V160_Familie\V160\V160.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\216Familie\216\DB_216_tb.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V160_Familie\V160\V160.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\216Familie\218\DB_218_vr.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V160_Familie\218\218.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\V200_DB\DB_221.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V200_Familie\V200.1\V200.1.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\232Familie\DB_232.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Dieselloks\DDR\132\132.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\290\DB_290_ar.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V90\V90.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\290\DB_290_tb.lok">
+  <FahrzeugInfo IDHaupt="6" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V90\V90.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\290\DB_290_or.lok">
+  <FahrzeugInfo IDHaupt="7" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V90\V90.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- 3 Kleinlokomotiven -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\333\DB_333_ar.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\Koef3\Koef3.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\V60_DB\DB_260_tb.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V60\V60.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieselloks\V60_DB\DB_360_vr.lok">
+  <FahrzeugInfo IDHaupt="5" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieselloks\BRD\V60\V60.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- 4 Elektrotriebwagen -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektrotriebwagen\401Familie\DB_402_ICE2_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektrotriebwagen\ICE1_2\402.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektrotriebwagen\403\DB_403_0_ICE3.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektrotriebwagen\ICE3\ICE3_Endwagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektrotriebwagen\403\DB_406_0_ICE3.lok">
+  <FahrzeugInfo IDHaupt="5" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektrotriebwagen\ICE3\ICE3_Endwagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektrotriebwagen\424-425-426\DB_425.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektrotriebwagen\424_425_426\424_425_EW.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- 5 Akkutriebwagen -->
+<!-- 6 Dieseltriebwagen -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\Vt11\DB_601.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieseltriebwagen\BRD\VT11\VT11.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\Vt11\DB_602.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieseltriebwagen\BRD\VT11\VT11.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\612\DB_612_0_vr.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\611\611.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\612\DB_612_5_vr.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\611\611.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\624\DB_624_ar.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Dieseltriebwagen\BRD\628_928\628_2.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\624\DB_624_ob.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Dieseltriebwagen\BRD\628_928\628_2.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\628\DB_628_4_rot.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Dieseltriebwagen\BRD\628_928\628_4.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\628\DB_928_4_rot.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche4\Dieseltriebwagen\BRD\628_928\928_4.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\642\VLB_642_0.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\DesiroClassic\DesiroClassic_B-Wagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\642\VLB_642_5.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\DesiroClassic\DesiroClassic_A-Wagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\643\DB_643_a.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\Talent\Talent_A-Wagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\643\DB_643_b.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\Talent\Talent_B-Wagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\643\EURO_643_a.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\Talent\Talent_A-Wagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\643\EURO_643_b.lok">
+  <FahrzeugInfo IDHaupt="3" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\Talent\Talent_B-Wagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\644\DB_644_a.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Dieseltriebwagen\Talent\Talent_A-Wagen.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- 7 Bahndienstfahrzeuge/Schienenbusse -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Dieseltriebwagen\Schienenbusse\db_798.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Dieseltriebwagen\BRD\VT98\VT98.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- 8 Beiwagen zu Elektrotriebwagen -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektrotriebwagen\401Familie\DB_808_ICE2_Stw_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1" Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektrotriebwagen\ICE1_2\808_Bpmzf.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- Steuerwagen -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Steuerwagen\BDnf\BDnf_E_silber_PZB90.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1"  Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\n_Wagen_Silberlinge\BDnf735.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Steuerwagen\BDnf\BDnf_E_silber_durchgehend_PZB90.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1"  Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\n_Wagen_Silberlinge\BDnf735.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Steuerwagen\BDnf\BDnf_V_silber_durchgehend_PZB90.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1"  Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\n_Wagen_Silberlinge\BDnf735.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Steuerwagen\Wittenberger_Kopf\Bnrdzf483_vr.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1"  Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\n_Wagen_Silberlinge\Bnrdzf.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Steuerwagen\Dosto\DBbzfa761_rot.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1"  Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Reisezugwagen\Doppelstockwagen\DBpbzfa_765.5.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Steuerwagen\Dosto\DBpbzfa763_5.lok">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1"  Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Reisezugwagen\Doppelstockwagen\DBpbzfa_765.5.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Steuerwagen\Bxf796\BXF796_DB_FARBSCHEMA.lok">
+  <FahrzeugInfo IDHaupt="5" IDNeben="1" Z2Z3Gedreht="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\n_Wagen_Silberlinge\BDnrzf740.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+</Zusi>

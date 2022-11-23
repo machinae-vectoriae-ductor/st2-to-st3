@@ -1,0 +1,83 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<Zusi>
+ <AutorEintrag AutorID="134" AutorName="Wolfgang Evers" AutorEmail="Wolfgang.Evers@TH-Koeln.de"/>
+<!-- 4 Elektrotriebwagen -->
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektrotriebwagen\424-425-426\DB_434_0.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektrotriebwagen\424_425_426\424_425_MW.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektrotriebwagen\424-425-426\DB_434_5.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Elektrotriebwagen\424_425_426\424_425_MW.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- 5 Akkutriebwagen -->
+<!-- 6 Dieseltriebwagen -->
+<!-- 7 Bahndienstfahrzeuge -->
+<!-- 8 Beiwagen zu Elektrotriebwagen -->
+<!-- 9 Beiwagen zu Dieseltriebwagen -->
+<!-- Personenwagen Nebengattung m -->
+ <Fahrzeug Z2Dateiname_rel="Waggons\Reisewagen\Intercity\Apmz121_tee.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\IC\Apmz121.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Waggons\Reisewagen\Intercity\Avmz111_tee.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\IC\Avmz111.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Waggons\Reisewagen\Intercity\Avmz207_tee.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\IC\Avmz207.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Waggons\Reisewagen\Intercity\Wrmz135_tee.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Reisezugwagen\BRD\IC\WRmz135.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+<!-- Personenwagen -->
+ <Fahrzeug Z2Dateiname_rel="Waggons\Reisewagen\Dosto\DABza756_rot.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Reisezugwagen\Doppelstockwagen\DABz_756.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <!-- <Fahrzeug Z2Dateiname_rel="Waggons\Reisewagen\Dosto\DBpz752_5.wag"> -->
+  <!-- <FahrzeugInfo IDHaupt="1" IDNeben="1"> -->
+   <!-- <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Reisezugwagen\Doppelstockwagen\DBz_751.rv.fzg" /> -->
+  <!-- </FahrzeugInfo> -->
+ <!-- </Fahrzeug> -->
+<!-- Güterwagen -->
+ <!-- <Fahrzeug Z2Dateiname_rel="Waggons\Gueterwagen\F-Wagen\Fcs_leer.wag"> -->
+  <!-- <FahrzeugInfo IDHaupt="1" IDNeben="1"> -->
+   <!-- <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Gueterwagen\BRD\G-Wagen\Glmms61\Glmms61.rv.fzg" /> -->
+  <!-- </FahrzeugInfo> -->
+ <!-- </Fahrzeug> -->
+ <Fahrzeug Z2Dateiname_rel="Waggons\Gueterwagen\G-Wagen\db_glmmehs61.wag">
+  <FahrzeugInfo IDHaupt="1" IDNeben="1">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Gueterwagen\BRD\G-Wagen\Glmms61\Glmms61.rv.fzg" />
+  </FahrzeugInfo>
+ </Fahrzeug>
+ <!-- <Fahrzeug Z2Dateiname_rel="Waggons\Gueterwagen\T-Wagen\DB_Tadgs959_bn.wag"> -->
+  <!-- <FahrzeugInfo IDHaupt="1" IDNeben="1"> -->
+   <!-- <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Gueterwagen\T-Wagen\Talns969\Talns969.rv.fzg" /> -->
+  <!-- </FahrzeugInfo> -->
+ <!-- </Fahrzeug> -->
+ <!-- <Fahrzeug Z2Dateiname_rel="Waggons\Gueterwagen\Z-Wagen\Kesselwaggon_grau02.wag"> -->
+  <!-- <FahrzeugInfo IDHaupt="1" IDNeben="1"> -->
+   <!-- <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Gueterwagen\Z-Wagen\Zans_95\Zans95.rv.fzg" /> -->
+  <!-- </FahrzeugInfo> -->
+ <!-- </Fahrzeug> -->
+ <!-- <Fahrzeug Z2Dateiname_rel="Waggons\Gueterwagen\Z-Wagen\Kesselw_k_grau03.wag"> -->
+  <!-- <FahrzeugInfo IDHaupt="1" IDNeben="1"> -->
+   <!-- <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Gueterwagen\Z-Wagen\Zans_95\Zans95.rv.fzg" /> -->
+  <!-- </FahrzeugInfo> -->
+ <!-- </Fahrzeug> -->
+ <!-- <Fahrzeug Z2Dateiname_rel="Waggons\Gueterwagen\Z-Wagen\Kesselw_k_gruen.wag"> -->
+  <!-- <FahrzeugInfo IDHaupt="1" IDNeben="1"> -->
+   <!-- <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche5\Gueterwagen\Z-Wagen\Zans_95\Zans95.rv.fzg" /> -->
+  <!-- </FahrzeugInfo> -->
+ <!-- </Fahrzeug> -->
+</Zusi>

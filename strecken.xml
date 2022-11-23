@@ -1,0 +1,137 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<Zusi>
+ <AutorEintrag AutorID="134" AutorName="Wolfgang Evers" AutorEmail="Wolfgang.Evers@TH-Koeln.de"/>
+ <Pfade Zusi2Pfad="C:\Program Files (x86)\Zusi" Zusi3Pfad="C:\Users\Public\Documents\Zusi3"/>
+ <!-- <Strecke Streckendatei="Arnstadt_Ilmenau\Arnstadt_Ilmenau.str" Zielverzeichnis="Deutschland\Zusi2_Arnstadt_Ilmenau"> -->
+  <!-- <Fahrplan Fahrplandatei="Arnstadt_Ilmenau\Fahrplan1.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Arnstadt_Ilmenau\Fahrplan2.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Bln_Anhalter_Bhf_Jueterbog\Strecke.str" Zielverzeichnis="Deutschland\Zusi2_Bln_Anhalter_Bhf_Jueterbog"> -->
+  <!-- <Fahrplan Fahrplandatei="Bln_Anhalter_Bhf_Jueterbog\Fahrplan.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Braunschweig-Harzburg\BraunschweigHarzburg.str" Zielverzeichnis="Deutschland\Zusi2_Braunschweig-Harzburg"> -->
+  <!-- <Fahrplan Fahrplandatei="Braunschweig-Harzburg\FahrplanHarzburg2.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="ChemnZwickau\" Zielverzeichnis="Deutschland\Zusi2_ChemnZwickau"> -->
+  <!-- <Fahrplan Fahrplandatei="ChemnZwickau\Baufahrplan2002_8-10Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="ChemnZwickau\S-Bahn_Fahrplan_1997.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="ChemnZwickau\Sommerfahrplan2002_13-15Uhr.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="DessauRosslau\Version_2_5\MedewitzBitterfeld.str" Zielverzeichnis="Deutschland\Zusi2_DessauRosslau"> -->
+  <!-- <Fahrplan Fahrplandatei="DessauRosslau\Version_2_5\"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Eifel\Eifelstrecke.str" Zielverzeichnis="Deutschland\Zusi2_Eifel"> -->
+  <!-- <Fahrplan Fahrplandatei="Eifel\Eifelstrecke.fpl" /> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Freilassing-Berchtesgaden\Freilassing-Berchtesgaden.str" Zielverzeichnis="Deutschland\Zusi2_Freilassing-Berchtesgaden"> -->
+  <!-- <Fahrplan Fahrplandatei="Freilassing-Berchtesgaden\1995 vormittags.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Freising-Unterzolling\Freising-Unterzolling.str" Zielverzeichnis="Deutschland\Zusi2_Freising-Unterzolling"> -->
+  <!-- <Fahrplan Fahrplandatei="Freising-Unterzolling\Freising-Unterzolling.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="KBS110\KBS110_HALI_HESD.STR" Zielverzeichnis="Deutschland\Zusi2_KBS110"> -->
+  <!-- <Fahrplan Fahrplandatei="KBS110\KBS110_HALI_HESD_Fahrplan2000.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="KBS650_Main-Neckar-Bahn\KBS650_Main_Neckar_Bahn_1_1.str" Zielverzeichnis="Deutschland\Zusi2_KBS650_Main-Neckar-Bahn"> -->
+  <!-- <Fahrplan Fahrplandatei="KBS650_Main-Neckar-Bahn\KBS650_Main_Neckar_Bahn_1_1.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="KBS850_Lichtenfels-Hof\Stand_2004\KBS850_2004.str" Zielverzeichnis="Deutschland\Zusi2_KBS850_Lichtenfels-Hof"> -->
+  <!-- <Fahrplan Fahrplandatei="KBS850_Lichtenfels-Hof\Stand_2004\Original 260504.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="KBS850_Lichtenfels-Hof\Stand_2004\Freitag_1004.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="KBS850_Lichtenfels-Hof\Stand_2004\Sonntag_0504.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Kochelseebahn\Tutzing Kochel.str" Zielverzeichnis="Deutschland\Zusi2_Kochelseebahn\"> -->
+  <!-- <Fahrplan Fahrplandatei="Kochelseebahn\Tutzing Kochel.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Limburg-Westerburg\Limburg-Westerburg.str" Zielverzeichnis="Deutschland\Zusi2_Limburg-Westerburg"> -->
+  <!-- <Fahrplan Fahrplandatei="Limburg-Westerburg\Sommer 2007-DB.fpl"/> -->
+ <!-- </Strecke> -->
+ <Strecke Streckendatei="LinkeRheinstrecke\Zustand1987_V1_2.str" Zielverzeichnis="Deutschland\Zusi2_LinkeRheinstrecke">
+  <Fahrplan Fahrplandatei="LinkeRheinstrecke\1978_Sommer_17-23Uhr.fpl"/>
+  <!-- <Fahrplan Fahrplandatei="LinkeRheinstrecke\2008_Winter_10-16Uhr.fpl"/> -->
+ </Strecke>
+ <!-- <Strecke Streckendatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\" Zielverzeichnis="Deutschland\Zusi2_Main-Weser-Bahn"> -->
+  <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\Fahrplan 2006 8-16 Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\Fahrplan 2006 16-24 Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\Fahrplan 2006 24-8 Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\FiktiverTakt2005.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\Winter1979_0430.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\Winter1991_0600.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Miesbach_Bayrischzell\Miesbach_Bayrischzell_Winter.str" Zielverzeichnis="Deutschland\Zusi2_Miesbach_Bayrischzell"> -->
+  <!-- <Fahrplan Fahrplandatei="Miesbach_Bayrischzell\Fahrplan.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Muenchen-Ingolstadt\Stand2002\Muenchen-Ingolstadt_2002.str" Zielverzeichnis="Deutschland\Zusi2_Muenchen-Ingolstadt"> -->
+  <!-- <Fahrplan Fahrplandatei="Muenchen-Ingolstadt\Stand2002\Fahrplan1.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Muenchen-Ingolstadt\Stand2002\Fruehmorgens.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Muenchen-Ingolstadt\Stand2002\Historisch.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Muenchen-Petershausen (Stammstrecke)\Muenchen-Petershausen.str" Zielverzeichnis="Deutschland\Zusi2_Muenchen-Petershausen"> -->
+  <!-- <Fahrplan Fahrplandatei="Muenchen-Petershausen (Stammstrecke)\Fahrplan_12_Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Muenchen-Petershausen (Stammstrecke)\Fahrplan_12_Uhr_historisch.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Duesseldorf\Duesseldorf_Neuss\Duesseldorf_Koeln_MGladbach_Krefeld.str" Zielverzeichnis="Deutschland\Duesseldorf_Neuss"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf_Neuss\Berufsverkehrsfahrplan.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf_Neuss\Fahrplan_2006.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf_Neuss\Nachtfahrplan_19Uhr40.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Duesseldorf\Duesseldorf-Leverkusen\Duesseldorf-Leverkusen.str" Zielverzeichnis="Deutschland\Zusi2_Netz_Duesseldorf\Duesseldorf-Leverkusen"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf-Leverkusen\Fahrplan 2006 8-16 Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf-Leverkusen\Fahrplan 2006 16-24 Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf-Leverkusen\Fahrplan 2006 24-8 Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf-Leverkusen\Fahrplan_Berufsverkehr_2003.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Duesseldorf-Leverkusen\Fahrplan_Wochenende_2003.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Duesseldorf\Gesamtstrecke_NE-Hafen\Gesamtstrecke_Neuss-Hafen.str" Zielverzeichnis="Deutschland\Zusi2_Gesamtstrecke_NE-Hafen"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Gesamtstrecke_NE-Hafen\Berufsverkehrsfahrplan.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Gesamtstrecke_NE-Hafen\Fahrplan_2006.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Duesseldorf\Gesamtstrecke_NE-Hafen\Nachtfahrplan_19Uhr40.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Muenchen_Sued\netz_m_sued.str" Zielverzeichnis="Deutschland\Zusi2_Netz_Muenchen_Sued"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Muenchen_Sued\Demo_Fahrplan.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Muenchen_Sued\Fahrplan_7_9_Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Muenchen_Sued\Fahrplan_12_14_Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Muenchen_Sued\Fahrplan2.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Muenchen_Sued\Fahrplan2002_15Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Muenchen_Sued\Sonntagsbetrieb.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Suedniedersachsen\Altenbeken-Northeim\1984_Altenbeken-Northeim.str" Zielverzeichnis="Deutschland\Zusi2_Altenbeken-Northeim"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\Altenbeken-Northeim\BunterFahrplan.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\Altenbeken-Northeim\Fahrplan_1985_05Uhr-11Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\Altenbeken-Northeim\Fahrplan_1985_11Uhr-17Uhr.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\Altenbeken-Northeim\Fahrplan_1985_17Uhr-22Uhr.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Suedniedersachsen\Braunschweig-Kreiensen\Braunschweig-Kreiensen.str" Zielverzeichnis="Deutschland\Zusi2_Braunschweig-Kreiensen"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\Braunschweig-Kreiensen\2001_Nachmittags.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Suedniedersachsen\KBS350\GOETTINGEN-KREIENSEN.str" Zielverzeichnis="Deutschland\Zusi2_KBS350-Goettingen-Kreiensen"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\KBS350\Fpl_2000.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\KBS350\Fpl_2003.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\KBS350\Fpl_2005.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Netz_Suedniedersachsen\KBS351\SFS Hildesheim-Goettingen.str" Zielverzeichnis="Deutschland\Zusi2_KBS351-SFS_Hildesheim-Goettingen"> -->
+  <!-- <Fahrplan Fahrplandatei="Netz_Suedniedersachsen\KBS351\Fpl_Cebit_2005.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="ObereRuhrtalbahn\Version_09\Obere_Ruhrtalbahn_1975.str" Zielverzeichnis="Deutschland\Zusi2_ObereRuhrtalbahn_1975"> -->
+  <!-- <Fahrplan Fahrplandatei="ObereRuhrtalbahn\Version_09\Winter1975_frueh.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="ObereRuhrtalbahn\Version_09\Winter1975_spaet.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="ObereRuhrtalbahn\Version_09\Obere_Ruhrtalbahn.str" Zielverzeichnis="Deutschland\Zusi2_ObereRuhrtalbahn"> -->
+  <!-- <Fahrplan Fahrplandatei="ObereRuhrtalbahn\Version_09\Fahrplan_1988.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="ObereRuhrtalbahn\Version_09\Fahrplan_2003.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="ObereRuhrtalbahn\Version_09\Fahrplan_2003_GNT.fpl"/> -->
+  <!-- <Fahrplan Fahrplandatei="ObereRuhrtalbahn\Version_09\Fahrplan_2003_light.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="UsedomerBaederbahn\Usedomer Baederbahn.str" Zielverzeichnis="Deutschland\Zusi2_UsedomerBaederbahn"> -->
+  <!-- <Fahrplan Fahrplandatei="UsedomerBaederbahn\Fahrplan.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Wannseebahn\1970\Wannseebahn_1970.str" Zielverzeichnis="Deutschland\Zusi2_Wannseebahn-1970"> -->
+  <!-- <Fahrplan Fahrplandatei="Wannseebahn\1970\Wannseebahn_1970.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Wannseebahn\2001\Wannseebahn_2001.str" Zielverzeichnis="Deutschland\Zusi2_Wannseebahn-2001"> -->
+  <!-- <Fahrplan Fahrplandatei="Wannseebahn\2001\Wannseebahn_2001.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="Wolfsburg-Harz\Wolfsburg-BraunschweigV_1_0.str" Zielverzeichnis="Deutschland\Zusi2_Wolfsburg-Harz"> -->
+  <!-- <Fahrplan Fahrplandatei="Wolfsburg-Harz\Braunschweig-Wolfsburg-Umleiterverkehr.fpl"/> -->
+ <!-- </Strecke> -->
+</Zusi>
