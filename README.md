@@ -1,6 +1,6 @@
 # Konvertierung von Zusi-2-Strecken nach Zusi 3
 Dieses Programm dient dazu, Zusi2-Strecken nach Zusi3 zu konvertieren.
-Dazu passt man in der Datei strecken.xml die Pfade an die eigene Installation an, wobei die eingestellten Pfade für eine Standard-Installtion stimmen sollten. Zudem entfernt an den gewünschten Strecken und Fahrpläne die Kommentarzeichen. Danach startet man zusi2to3.py, wobei man mindestens Python 3.9 benötigt.
+Dazu passt man in der Datei strecken.xml die Pfade an die eigene Installation an, wobei die eingestellten Pfade für eine Standard-Installation stimmen sollten. Zudem entfernt an den gewünschten Strecken und Fahrpläne die Kommentarzeichen. Danach startet man zusi2to3.py, wobei man mindestens Python 3.9 benötigt.
 
 Dies ist ein unfertiges Projekt mit vielen Einschränkungen, von denen sich manche eventuell niemals beheben lassen.
 
@@ -15,7 +15,7 @@ Folgende Einschränkungen lassen sich möglicherweise noch beheben:
 - Die PZB geht nur sehr vereinzelt. LZB und GNT sind noch gar nicht implementiert.
 - Teilweise klappt die Weiterschaltung der Signale nicht, so dass die Züge stehen bleiben. Ein Zeitsprung führt sicher in diesen Zustand.
 - Die ortsfesten Zp9-Signale leuchten dauernd.
-- Teilweise laufen die Koordinaten der dargestellten Landschaft und der flexibelen Elemente darin, wie Züge und Signale auseinander. Dadurch schweben Züge manchmal gut sichtbar über dem Gleis oder fahren leicht daneben. Indusi-Magnete liegen schon mal nicht an der richtige Stelle.
+- Teilweise laufen die Koordinaten der dargestellten Landschaft und der flexibelen Elemente darin, wie Züge und Signale, auseinander. Dadurch schweben Züge manchmal gut sichtbar über dem Gleis oder fahren leicht daneben. Indusi-Magnete liegen schon mal nicht an der richtigen Stelle.
 - Die Fahrplandarstellung zeigt noch keine Sbk-Signale und keine Ende-Zeichen des anschließenden Weichenbereichs. Auch die Darstellung des verkürzten Vorsignalabstands und der Signalgeschwindigkeiten sind noch nicht korrekt.
 - Züge mit Zugwende werden nur bis zur Zugwende konvertiert.
 - Es lassen sich nur Strecken mit der Datei-Version 2.3 konvertieren.
