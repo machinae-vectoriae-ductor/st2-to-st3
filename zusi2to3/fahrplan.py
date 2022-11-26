@@ -213,6 +213,7 @@ def conv_fpn(
                     {"Bezeichnung": "default", "ZufallsWert": "1"},
                 )
 
+                lokgefunden = True
                 for i in range(len(fahrzeugliste)):
                     fahrzeuggefunden = False
                     z3fahrzeughauptid = "1"
@@ -260,6 +261,7 @@ def conv_fpn(
                                                     ][0].attrib["Z3Dateiname_rel"]
                                         fahrzeuggefunden = True
                         if fahrzeuggefunden != True:
+                            lokgefunden = False
                             if str(fahrzeugliste[i]) not in tfz_ng:
                                 tfz_ng.append(str(fahrzeugliste[i]))
                             if "elektroloks" in str(fahrzeugliste[i]).lower():
@@ -341,7 +343,8 @@ def conv_fpn(
             )
 
             # if not ("deko" in z2zugdateiname_rel.lower()):
-            if True:
+            if lokgefunden:
+            # if True:
                 nfpn_zug = ET.SubElement(nfpn_fahrplan, "Zug")
                 # print(f"{z2zugdateiname_abs} -> {z3zugdateiname_abs}", file=sys.stderr)
                 ET.SubElement(nfpn_zug, "Datei", {"Dateiname": z3zugdateiname_rel})
@@ -355,8 +358,8 @@ def conv_fpn(
         treefpn.write(
             z3fahrplandateiname_abs, encoding="UTF-8-SIG", xml_declaration=True
         )
-        for i in range(len(tfz_ng)):
-            print("Fahrzeug " + tfz_ng[i] + " nicht in Übersetzungstabelle gefunden.")
+        # for i in range(len(tfz_ng)):
+        #     print("Fahrzeug " + tfz_ng[i] + " nicht in Übersetzungstabelle gefunden.")
         # for i in range(len(wag_ng)):
         #     print("Fahrzeug " + wag_ng[i] + " nicht in Übersetzungstabelle gefunden.")
     ffpn.close
