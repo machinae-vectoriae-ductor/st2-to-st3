@@ -17,6 +17,12 @@
   <!-- <Fahrplan Fahrplandatei="ChemnZwickau\S-Bahn_Fahrplan_1997.fpl"/> -->
   <!-- <Fahrplan Fahrplandatei="ChemnZwickau\Sommerfahrplan2002_13-15Uhr.fpl"/> -->
  <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="DemoStrecken\Ma_Signale_Demostrecke\MaDemoStrecke.str" Zielverzeichnis="Deutschland\Zusi2_Demo-Ma-Signale"> -->
+  <!-- <Fahrplan Fahrplandatei="DemoStrecken\Ma_Signale_Demostrecke\Fahrplan.fpl"/> -->
+ <!-- </Strecke> -->
+ <!-- <Strecke Streckendatei="DemoStrecken\Uebungsstrecke\UebungsStrecke.str" Zielverzeichnis="Deutschland\Zusi2_Demo-Uebungsstrecke"> -->
+  <!-- <Fahrplan Fahrplandatei="DemoStrecken\Uebungsstrecke\Uebungsfahrplan1.fpl"/> -->
+ <!-- </Strecke> -->
  <!-- <Strecke Streckendatei="DessauRosslau\Version_2_5\MedewitzBitterfeld.str" Zielverzeichnis="Deutschland\Zusi2_DessauRosslau"> -->
   <!-- <Fahrplan Fahrplandatei="DessauRosslau\Version_2_5\"/> -->
  <!-- </Strecke> -->
@@ -46,7 +52,7 @@
  <!-- <Strecke Streckendatei="Limburg-Westerburg\Limburg-Westerburg.str" Zielverzeichnis="Deutschland\Zusi2_Limburg-Westerburg"> -->
   <!-- <Fahrplan Fahrplandatei="Limburg-Westerburg\Sommer 2007-DB.fpl"/> -->
  <!-- </Strecke> -->
- <Strecke Streckendatei="LinkeRheinstrecke\Zustand1987_V1_2.str" Zielverzeichnis="Deutschland\Zusi2_LinkeRheinstrecke">
+ <Strecke Streckendatei="LinkeRheinstrecke\LinkeRheinstrecke1987_V2_62.str" Zielverzeichnis="Deutschland\Zusi2_LinkeRheinstrecke">
   <Fahrplan Fahrplandatei="LinkeRheinstrecke\1978_Sommer_17-23Uhr.fpl"/>
   <!-- <Fahrplan Fahrplandatei="LinkeRheinstrecke\2008_Winter_10-16Uhr.fpl"/> -->
  </Strecke>
