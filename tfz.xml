@@ -38,6 +38,11 @@
    <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>
   </FahrzeugInfo>
  </Fahrzeug>
+ <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\103\DB_103_2r.lok">
+  <FahrzeugInfo IDHaupt="2" IDNeben="1" SASchaltung="2">
+   <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>
+  </FahrzeugInfo>
+ </Fahrzeug>
  <Fahrzeug Z2Dateiname_rel="Loks\Elektroloks\103\DB_103_2rb_abgebuegelt.lok">
   <FahrzeugInfo IDHaupt="2" IDNeben="1">
    <Datei Z3Dateiname_rel="RollingStock\Deutschland\Epoche3\Elektroloks\BRD\E03\103.rv.fzg"/>

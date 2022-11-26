@@ -8,10 +8,11 @@ Folgende Einschränkungen liegen an der Zusi 2-Datenbasis und sind nicht behebba
 - Die Grafik ist im Vergleich zu den Zusi 3-Projekten sehr einfach. In manchen Strecken sind nur die Bahnanlagen dargestellt und keinerlei Landschaft.
 
 Folgende Einschränkungen lassen sich möglicherweise noch beheben:
-- Zusi 2 hat einen großen Fahrzeugpark, der mit den Dateien tfz.xml und wagen.xml auf Zusi3 abgebildet werden soll. Dies ist bisher nur für die Triebfahrzeuge des 1978er Fahrplans der linken Rheinstrecke geschehen. Bei Triebfahrzeugen, für die noch keine Übersetzung angelegt wurde, werden die BR120 und die BR218 als Ersatz genommen. Bei Wagen ohne Übersetzung werden die Zusi 2-Modelle konvertiert. Für manche Zusi 2-Fahrzeuge gibt es auch kein Modell in Zusi 3.
+- Zusi 2 hat einen großen Fahrzeugpark, der mit den Dateien tfz.xml und wagen.xml auf Zusi3 abgebildet werden soll. Dies ist bisher nur teilweise für die Triebfahrzeuge des 1978er Fahrplans der linken Rheinstrecke geschehen. Wenn das führende Fahrzeug nicht in der Übersetzungstabelle eingetragen ist, wird der Zug nicht in den Fahrplan aufgenommen. Bei Wagen ohne Übersetzung werden die Zusi 2-Modelle konvertiert. Für manche Zusi 2-Fahrzeuge gibt es auch kein Modell in Zusi 3.
+- Falls in Zusi 3 die Meldung erscheint, dass ein Zug zu lang zum Aufgleisen ist, sollte der Zug von Hand aus der Fahrplandatei gelöscht werden, da Zusi 3 beim Aufgleisversuch abzustürzen scheint.
 - Die Kurvenschienen sind Vielecke, denen der Zug in Zusi 3 exakt folgt, was zu einer sehr unruhigen Kurvenfahrt führen kann.
 - Die Farben der Landschaft werden von Zusi 3 leicht anders dargestellt.
-- Die Kombinationssignale flackern teilweise sinnlos.
+- Die Kombinationssignale flackern teilweise sinnlos. Dies scheint in Verbindung mit einem Ersatzsignal vorzukommen.
 - Die PZB geht nur sehr vereinzelt. LZB und GNT sind noch gar nicht implementiert.
 - Teilweise klappt die Weiterschaltung der Signale nicht, so dass die Züge stehen bleiben. Ein Zeitsprung führt sicher in diesen Zustand.
 - Die ortsfesten Zp9-Signale leuchten dauernd.
