@@ -15,6 +15,7 @@ def conv_fpn(
     z3pfad,
     zielverzeichnis_rel,
     rekursionstiefe,
+    ignorzug,
 ):
     seen_nrs = set()
     tfz_ng = []
@@ -325,8 +326,15 @@ def conv_fpn(
                         "FahrzeugInfo",
                         {"IDHaupt": z3fahrzeughauptid, "IDNeben": z3fahrzeugnebenid},
                     )
-                    if z3saschaltung != "0":
-                        nzug_fzginfo.attrib["SASchaltung"] = z3saschaltung
+                    if z3saschaltung == "1":
+                        nzug_fzginfo.attrib["SASchaltung"] = "1"
+                    if z3saschaltung == "2":
+                        if fahrzeug_gedreht[i]:
+                            nzug_fzginfo.attrib["SASchaltung"] = "1"
+                        else:
+                            nzug_fzginfo.attrib["SASchaltung"] = "2"
+                    # if z3saschaltung != "0" and fahrzeug_gedreht[i]:
+                    #     nzug_fzginfo.attrib["SASchaltung"] = z3saschaltung
                     if fahrzeug_gedreht[i] ^ z2z3gedreht:
                         nzug_fzginfo.attrib["Gedreht"] = "1"
                     ET.SubElement(
@@ -343,8 +351,8 @@ def conv_fpn(
             )
 
             # if not ("deko" in z2zugdateiname_rel.lower()):
-            if lokgefunden:
-            # if True:
+            if lokgefunden and not zugnr in ignorzug:
+                # if True:
                 nfpn_zug = ET.SubElement(nfpn_fahrplan, "Zug")
                 # print(f"{z2zugdateiname_abs} -> {z3zugdateiname_abs}", file=sys.stderr)
                 ET.SubElement(nfpn_zug, "Datei", {"Dateiname": z3zugdateiname_rel})

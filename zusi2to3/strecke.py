@@ -6,10 +6,12 @@ import copy
 import enum
 import os
 import math
+import numpy as np
 import xml.etree.ElementTree as ET
-from collections import defaultdict, namedtuple
+from collections import namedtuple
+from openpyxl import Workbook
 
-from . import common, landschaft
+from . import landschaft
 from .common import readfloat, readfloatstr
 
 
@@ -27,36 +29,68 @@ def get_ref_nr(elem_nr, ref_typ):
     return 10 * elem_nr + ref_typ
 
 
-def allocate_refpunkt(n_strecke, elem_nr, ref_typ):
-    n_re = ET.SubElement(n_strecke, "ReferenzElemente")
-    n_re.attrib["ReferenzNr"] = str(get_ref_nr(elem_nr, ref_typ))
-    n_re.attrib["StrElement"] = str(elem_nr)
+def allocate_refpunkt(nstrecke_strecke, elem_nr, ref_typ):
+    nstrecke_re = ET.SubElement(nstrecke_strecke, "ReferenzElemente")
+    nstrecke_re.attrib["ReferenzNr"] = str(get_ref_nr(elem_nr, ref_typ))
+    nstrecke_re.attrib["StrElement"] = str(elem_nr)
     if ref_typ == RefTyp.SIGNAL_GEGENRICHTUNG:
-        n_re.attrib["RefTyp"] = str(RefTyp.SIGNAL)
+        nstrecke_re.attrib["RefTyp"] = str(RefTyp.SIGNAL)
     elif ref_typ == RefTyp.WEICHE_GEGENRICHTUNG:
-        n_re.attrib["RefTyp"] = str(RefTyp.WEICHE)
+        nstrecke_re.attrib["RefTyp"] = str(RefTyp.WEICHE)
     else:
-        n_re.attrib["RefTyp"] = str(ref_typ)
-        n_re.attrib["StrNorm"] = "1"
+        nstrecke_re.attrib["RefTyp"] = str(ref_typ)
+        nstrecke_re.attrib["StrNorm"] = "1"
 
-    return n_re
+    return nstrecke_re
 
 
 VerknParameter = namedtuple(
     "VerknParameter", ["dateiname_zusi", "x", "y", "z", "rx", "ry", "rz", "boundingr"]
 )
 
+Ereignis = namedtuple("Ereignis", ["nummer", "text", "wert"])
+
+
+class Koordinate:
+    def __init__(self):
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.rx = 0.0
+        self.ry = 0.0
+        self.rz = 0.0
+        self.lsdatei = ""
+
+
+class SignalKoordinate:
+    def __init__(self):
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+        self.rx = 0.0
+        self.ry = 0.0
+        self.rz = 0.0
+        self.lsdatei = ""
+
 
 class Signal:
     def __init__(self):
         self.elnr = 0
+        self.btrst = ""
+        self.stw = ""
+        self.signame = ""
+        self.sigflag = 0
+        self.sigtyp = 0
+        self.boundingr = 0.0
+        self.koord = Koordinate
+        self.sigframe = []
         self.block = ""
         self.gleis = ""
         self.matrix = []
         self.vsig_geschw = []
         self.hsig_geschw = []
         self.vsigs = []
-        self.anzahl_sigframes = 0
+        self.master = 0
 
 
 class MatrixZeile:
@@ -64,6 +98,7 @@ class MatrixZeile:
         self.block = ""
         self.gleis = ""
         self.vmax = 0
+        self.fstrtyp = 0
         self.spalten = []
 
 
@@ -76,145 +111,216 @@ class MatrixEintrag:
         self.er2 = 0
 
 
-def conv_ereignis(er_nr, parent_node):
-    if er_nr == 0:  # Kein Ereignis
+signalleer = {
+    "Vorhanden": False,  # Signal in dem Streckenelement vorhanden
+    "BoundingR": 0.0,  # Boundingradius
+    "koord": SignalKoordinate,  # Standortkoordinate
+    "ls0": "",  # Datei, die die zum Signalbild gehörende Landschaft enthält
+    "ls1": "",  # Datei, die die zum Signalbild gehörende Landschaft enthält
+    "Ereignis": Ereignis,  # Ereignis
+    "EreignisWert": 0.0,  # Ereigniswert
+    "vsig": 0.0,  # Am Signal angekündigte Geschwindigkeit
+    "master": 0,  # Verweis auf Masterelement
+}
+
+
+def conv_ereignis(z2ernr, z2ertext):
+    z3ernr = 0
+    z3ertext = ""
+    z3erwert = 0.0
+    if z2ernr == 0:  # Kein Ereignis
         pass
-    elif (
-        er_nr >= 1 and er_nr <= 499
-    ):  # Bedingte Entgleisung, wird ausgelöst bei "Fahrt-Geschwindigkeit in km/h größer Ereigniswert" (+Toleranz)
-        return ET.SubElement(
-            parent_node, "Ereignis", {"Er": "1", "Wert": str(er_nr / 3.6)}
-        )
-    elif er_nr == 500:  # PZB 500 Hz-Beeinflussung
-        return ET.SubElement(parent_node, "Ereignis", {"Er": "500"})
-    elif er_nr == 1000:  # PZB 1000 Hz-Beeinflussung
-        return ET.SubElement(parent_node, "Ereignis", {"Er": "1000"})
-    elif (
-        er_nr >= 1001 and er_nr <= 1500
-    ):  # Bedingte 1000 Hz-PZB-Beeinflussung, wird ausgelöst bei "Fahrt-Geschwindigkeit in km/h größer (Ereigniswert - 1000)", also z.B. 1105: 1000 Hz Beeinflussung bei 105 km/h und mehr
-        return ET.SubElement(
-            parent_node, "Ereignis", {"Er": "1000", "Wert": str(er_nr - 1000)}
-        )
-    elif er_nr == 2000:  # PZB 2000 Hz-Beeinflussung
-        return ET.SubElement(parent_node, "Ereignis", {"Er": "2000"})
-    elif (
-        er_nr >= 2001 and er_nr <= 2500
-    ):  # Bedingte 2000 Hz-PZB-Beeinflussung (Geschwindigkeitsprüfabschnitt), wird ausgelöst bei "Fahrt-Geschwindigkeit in km/h größer (Ereigniswert - 2000)"
-        return ET.SubElement(
-            parent_node, "Ereignis", {"Er": "2000", "Wert": str(er_nr - 2000)}
-        )
-    elif (
-        er_nr == 3001
-    ):  # Fahrstraße anfordern (wird standardmäßig nicht gebraucht, da die Züge automatisch anfordern)
+    # Bedingte Entgleisung, wird ausgelöst bei "Fahrt-Geschwindigkeit in km/h größer Ereigniswert" (+Toleranz)
+    elif z2ernr >= 1 and z2ernr <= 499:
+        z3ernr = 1
+        z3erwert = 1.1 * z2ernr / 3.6
+    # PZB 500 Hz-Beeinflussung
+    elif z2ernr == 500:
+        z3ernr = 500
+    # PZB 1000 Hz-Beeinflussung
+    elif z2ernr == 1000:
+        z3ernr = 1000
+    # Bedingte 1000 Hz-PZB-Beeinflussung, wird ausgelöst bei "Fahrt-Geschwindigkeit in km/h größer (Ereigniswert - 1000)", also z.B. 1105: 1000 Hz Beeinflussung bei 105 km/h und mehr
+    elif z2ernr >= 1001 and z2ernr <= 1500:
+        z3ernr = 1000
+        z3erwert = float(z2ernr - 1000)
+    # PZB 2000 Hz-Beeinflussung
+    elif z2ernr == 2000:
+        z3ernr = 2000
+    # Bedingte 2000 Hz-PZB-Beeinflussung (Geschwindigkeitsprüfabschnitt), wird ausgelöst bei "Fahrt-Geschwindigkeit in km/h größer (Ereigniswert - 2000)"
+    elif z2ernr >= 2001 and z2ernr <= 2500:
+        z3ernr = 2000
+        z3erwert = float(z2ernr - 2000)
+    # Fahrstraße anfordern (wird standardmäßig nicht gebraucht, da die Züge automatisch anfordern)
+    elif z2ernr == 3001:
+        z3ernr = 5
+    # Fahrstraße auflösen
+    elif z2ernr == 3002:
+        z3ernr = 4
+    # Zug entfernen (Zug wird sofort entfernt und der belegte Blockabschnitt freigegeben)
+    elif z2ernr == 3003:
+        z3ernr = 16
+    # Zwangshalt
+    elif z2ernr == 3004:
+        z3ernr = 14
+    # Langsamfahrt Ende
+    elif z2ernr == 3005:
+        # z3ernr = 1000002
         pass
-    elif er_nr == 3002:  # Fahrstraße auflösen
+    # Betriebsstelle
+    elif z2ernr == 3006:
+        z3ernr = 6
+        z3ertext = z2ertext
+    # Haltepunkt erwarten
+    elif z2ernr == 3007:
+        # print("Ereignis Haltepunkt erwarten")
         pass
-    elif (
-        er_nr == 3003
-    ):  # Zug entfernen (Zug wird sofort entfernt und der belegte Blockabschnitt freigegeben)
+    # Bahnsteigmitte
+    elif z2ernr == 3008:
+        z3ernr = 1000011
+        z3ertext = z2ertext
+    # Bahnsteigende
+    elif z2ernr == 3009:
+        z3ernr = 1000012
+        z3ertext = z2ertext
+    # Langsamfahrt Anfang
+    elif z2ernr == 3010:
         pass
-    elif er_nr == 3004:  # Zwangshalt
+    # Pfeifen, Kurz vorher Pfeifen - Missachtung führt zu Punktabzug
+    elif z2ernr == 3011:
+        z3ernr = 30
+    # LZB-Anfang (Zug wird in die LZB aufgenommen)
+    elif z2ernr == 3012:
+        z3ernr = 1003001
+    # LZB-Ende (Zug wird am vorhergehenden Hauptsignal aus der LZB entlassen)
+    elif z2ernr == 3013:
+        z3ernr = 3002
+    # Vorher keine Fahrstraße (Bis der Zug dieses Ereignis überquert hat, wird ihm keine Fahrstraße mehr gestellt)
+    elif z2ernr == 3021:
+        z3ernr = 13
+    # Zp9-Signal (muss in den Eigenschaften eines Fahrstraßensignals gesetzt werden, dann wird dieses erst beim Abfahrtauftrag auf "Fahrt" gestellt)
+    elif z2ernr == 3022:
+        z3ernr = 25
+    # Weiterfahrt nach Halt, Überfahren ohne vorigen Halt führt zu Punktabzug
+    elif z2ernr == 3023:
+        z3ernr = 18
+    # Signum Warnung
+    # elif z2ernr == 3024:
+    # pass
+    # Signum Halt
+    # elif z2ernr == 3025:
+    # pass
+    # Sich nähernder Zug bekommt frühestens 1000m vor diesem Ereignis die nächste Fahrstraße
+    # elif z2ernr == 3026:
+    # pass
+    # Sich nähernder Zug bekommt frühestens 2000m vor diesem Ereignis die nächste Fahrstraße
+    # elif z2ernr == 3027:
+    # pass
+    # Sich nähernder Zug bekommt frühestens 3000m vor diesem Ereignis die nächste Fahrstraße
+    # elif z2ernr == 3028:
+    # pass
+    # Vorher keine Vorsignalverknüpfung - Hauptsignal ignoriert beim Verknüpfen der Signallogik alle Vorsignale vor diesem Ereignis
+    # elif z2ernr == 3029:
+    # z3ernr = 20
+    # pass
+    # Ereignis ohne Funktion
+    elif z2ernr == 3030:
         pass
-    elif er_nr == 3005:  # Langsamfahrt Ende
+    # Befehl A
+    # elif z2ernr == 3031:
+    # z3ernr = 32
+    # z3erwert =
+    # pass
+    # Befehl A (Stillstand)
+    # elif z2ernr == 3032:
+    # z3ernr = 32
+    # z3erwert =
+    # pass
+    # Befehl B
+    # elif z2ernr == 3033:
+    # z3ernr = 32
+    # z3erwert =
+    # pass
+    # Befehl B (Stillstand)
+    # elif z2ernr == 3034:
+    # z3ernr = 32
+    # z3erwert =
+    # pass
+    # Langsamfahrtende (Zuganfang)
+    # elif z2ernr == 3035:
+    # pass
+    # Wendepunkt (wird nur im Fahrplaneditor benötigt, Kennzeichnet Wendepunkte, muß hinter dem Wende-HSig liegen)
+    elif z2ernr == 3036:
         pass
-    elif er_nr == 3006:  # Betriebsstelle
+    # Wendepunkt auf anderen Blocknamen (wenn das Hsig vor dem Wendemanöver einen anderen Blocknamen hat als das nach dem Wenden)
+    elif z2ernr == 3037:
         pass
-    elif er_nr == 3007:  # Haltepunkt erwarten
+    # Signal ist zugbedient (muß in den Eigenschaften eines Fahrstraßensignals gesetzt werden, dann wird dieses durch Ereignis 3039 gestellt)
+    # elif z2ernr == 3038:
+    # pass
+    # Zugbedientes Signal schalten
+    # elif z2ernr == 3039:
+    # pass
+    # Streckensound, Sound-Datei unter "Beschreibung" angeben
+    # elif z2ernr == 3040:
+    # pass
+    # Abrupt-Halt: Zug wird schlagartig gestoppt
+    elif z2ernr == 3041:
+        z3ernr = 15
+    # GNT: Keine Geschwindigkeitserhöhung
+    elif z2ernr == 4000:
         pass
-    elif er_nr == 3008:  # Bahnsteigmitte, s. auch
+    # GNT-Anfang
+    elif z2ernr == 4001:
+        z3ernr = 4011
         pass
-    elif er_nr == 3009:  # Bahnsteigende, s. auch
+    # GNT-Ende
+    elif z2ernr == 4002:
+        z3ernr = 4012
         pass
-    elif er_nr == 3010:  # Langsamfahrt Anfang
+    # GNT: PZB-Unterdrückung auf 150 m (alle PZB-Magnete werden auf den nächsten 150 m unterdrückt)
+    elif z2ernr == 4003:
+        z3ernr = 4013
         pass
-    elif er_nr == 3011:  # Pfeifen, Kurz vorher Pfeifen - Mißachtung führt zu Punktabzug
-        pass
-    elif er_nr == 3012:  # LZB-Anfang (Zug wird in die LZB aufgenommen)
-        pass
-    elif (
-        er_nr == 3013
-    ):  # LZB-Ende (Zug wird am vorhergehenden Hauptsignal aus der LZB entlassen)
-        pass
-    elif (
-        er_nr == 3021
-    ):  # Vorher keine Fahrstraße (Bis der Zug dieses Ereignis überquert hat, wird ihm keine Fahrstraße mehr gestellt), Hinweise
-        pass
-    elif (
-        er_nr == 3022
-    ):  # Zp9-Signal (muß in den Eigenschaften eines Fahrstraßensignals gesetzt werden, dann wird dieses erst beim Abfahrtauftrag auf "Fahrt" gestellt)
-        pass
-    elif (
-        er_nr == 3023
-    ):  # Weiterfahrt nach Halt, Überfahren ohne vorigen Halt führt zu Punktabzug
-        pass
-    elif er_nr == 3024:  # Signum Warnung
-        pass
-    elif er_nr == 3025:  # Signum Halt
-        pass
-    elif (
-        er_nr == 3026
-    ):  # Sich nähernder Zug bekommt frühestens 1000m vor diesem Ereignis die nächste Fahrstraße, Hinweise
-        pass
-    elif (
-        er_nr == 3027
-    ):  # Sich nähernder Zug bekommt frühestens 2000m vor diesem Ereignis die nächste Fahrstraße, Hinweise
-        pass
-    elif (
-        er_nr == 3028
-    ):  # Sich nähernder Zug bekommt frühestens 3000m vor diesem Ereignis die nächste Fahrstraße, Hinweise
-        pass
-    elif (
-        er_nr == 3029
-    ):  # Vorher keine Vorsignalverknüpfung - Hauptsignal ignoriert beim Verknüpfen der Signallogik alle Vorsignale vor diesem Ereignis
-        pass
-    elif er_nr == 3030:  # Ereignis ohne Funktion
-        pass
-    elif er_nr == 3031:  # Befehl A
-        pass
-    elif er_nr == 3032:  # Befehl A (Stillstand)
-        pass
-    elif er_nr == 3033:  # Befehl B
-        pass
-    elif er_nr == 3034:  # Befehl B (Stillstand)
-        pass
-    elif er_nr == 3035:  # Langsamfahrtende (Zuganfang)
-        pass
-    elif (
-        er_nr == 3036
-    ):  # Wendepunkt (wird nur im Fahrplaneditor benötigt, Kennzeichnet Wendepunkte, muß hinter dem Wende-HSig liegen)
-        pass
-    elif (
-        er_nr == 3037
-    ):  # Wendepunkt auf anderen Blocknamen (wenn das Hsig vor dem Wendemanöver einen anderen Blocknamen hat als das nach dem Wenden)
-        pass
-    elif (
-        er_nr == 3038
-    ):  # Signal ist zugbedient (muß in den Eigenschaften eines Fahrstraßensignals gesetzt werden, dann wird dieses durch Ereignis 3039 gestellt), s. auch hier
-        pass
-    elif er_nr == 3039:  # Zugbedientes Signal schalten, s. auch hier
-        pass
-    elif er_nr == 3040:  # Streckensound, Sound-Datei unter "Beschreibung" angeben
-        pass
-    elif er_nr == 3041:  # Abrupt-Halt: Zug wird schlagartig gestoppt
-        pass
-    elif er_nr == 4000:  # GNT: Keine Geschwindigkeitserhöhung
-        pass
-    elif er_nr == 4001:  # GNT-Anfang
-        pass
-    elif er_nr == 4002:  # GNT-Ende
-        pass
-    elif (
-        er_nr == 4003
-    ):  # GNT: PZB-Unterdrückung auf 150 m (alle PZB-Magnete werden auf den nächsten 150 m unterdrückt)
-        pass
-    elif (
-        er_nr >= 4004 and er_nr <= 4500
-    ):  # GNT: Erhöhung der GNT-Geschwindigkeit gegenüber normaler Geschwindigkeit
-        pass
+    # GNT: Erhöhung der GNT-Geschwindigkeit gegenüber normaler Geschwindigkeit
+    # elif z2ernr >= 4004 and z2ernr <= 4500:
+    # z3ernr = 4010
+    # z3erwert =
+    # pass
+    # elif z2ernr > 0:
+    #     print("Ereignis: ", z2ernr, z2ertext)
+    # Rechtsbündiger Eintrag
+    if "..." in z3ertext:
+        z3ertext = z3ertext.replace("...", "@sep=") + "@"
+    # Verkürzter Vorsignalabstand
+    if chr(186) in z3ertext:
+        z3ertext = z3ertext.replace(chr(186), "@icon=7@")
+    return Ereignis(z3ernr, z3ertext, z3erwert)
+
+
+def define_circle(p1, p2, p3):
+    """
+    Returns the center and radius of the circle passing the given 3 points.
+    In case the 3 points form a line, returns (None, infinity).
+    """
+    temp = p2[0] * p2[0] + p2[1] * p2[1]
+    bc = (p1[0] * p1[0] + p1[1] * p1[1] - temp) / 2
+    cd = (temp - p3[0] * p3[0] - p3[1] * p3[1]) / 2
+    det = (p1[0] - p2[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p2[1])
+
+    if abs(det) < 1.0e-6:
+        return (None, np.inf)
+
+    # Center of circle
+    cx = (bc * (p2[1] - p3[1]) - cd * (p1[1] - p2[1])) / det
+    cy = ((p1[0] - p2[0]) * cd - (p2[0] - p3[0]) * bc) / det
+
+    radius = np.sqrt((cx - p1[0]) ** 2 + (cy - p1[1]) ** 2)
+    return ((cx, cy), radius)
 
 
 def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
-    elements = {}
+    streckenelemente = {}
     nodes = {}
     signale = {}
     anonymesignale = {}
@@ -228,12 +334,14 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
     )
     z3streckendateiname_abs = os.path.join(z3pfad, z3streckendateiname_rel)
 
-    n_root = ET.Element("Zusi")
-    tree = ET.ElementTree(n_root)
-    ET.SubElement(
-        n_root, "Info", {"DateiTyp": "Strecke", "Version": "A.1", "MinVersion": "A.1"}
+    nstrecke_root = ET.Element("Zusi")
+    tree = ET.ElementTree(nstrecke_root)
+    nstrecke_info = ET.SubElement(
+        nstrecke_root,
+        "Info",
+        {"DateiTyp": "Strecke", "Version": "A.4", "MinVersion": "A.1"},
     )
-    n_strecke = ET.SubElement(n_root, "Strecke")
+    nstrecke_strecke = ET.SubElement(nstrecke_root, "Strecke", {"Himmelsmodell": "2"})
 
     f = open(z2streckendateiname_abs, "r", encoding="iso-8859-1")
     zusiversion = f.readline().strip()
@@ -241,399 +349,457 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
         print("Version", zusiversion, "wird nicht gelesen")
         sys.exit()
 
-    for i in range(0, 2):
-        print(f.readline())
+    strecke_autor = f.readline().strip()
+    if strecke_autor:
+        ET.SubElement(nstrecke_info, "AutorEintrag", {"AutorName": strecke_autor})
+    print("Autor:", strecke_autor)
+    print("Breitengrad:", f.readline())  # Breitengrad
 
     rekursionstiefe = int(f.readline())
 
-    for i in range(0, 2):
-        while not f.readline().startswith("#"):
-            pass
+    while not (strecke_info := f.readline().strip()).startswith(
+        "#"
+    ):  # Freier Text, nur zur Info
+        print("Info:", strecke_info)
+    while not (strecke_utm := f.readline().strip()).startswith(
+        "#"
+    ):  # UTM-Infos, werden von den Ziegler Tools abgelegt
+        print("UTM:", strecke_utm)
 
-    f.readline()
-    ls_datei = f.readline().strip()
+    f.readline()  # Geschwindigkeits-Multiplikator bezogen auf m/s (bisher ohne Funktion)
+    ls_datei = landschaft.conv_ls(f.readline().strip(), no_displacement=True)[
+        0
+    ]  # Landschaftsdatei der Strecke
+    print("Landschaftsdatei:", ls_datei)
 
+    ET.SubElement(nstrecke_strecke, "Datei", {"Dateiname": ls_datei})
+    nstrecke_skydome = ET.SubElement(nstrecke_strecke, "SkyDome")
+    ET.SubElement(nstrecke_skydome, "HimmelTex", {"Dateiname": "_Setup\sky\sky.dds"})
+    ET.SubElement(nstrecke_skydome, "SonneTex", {"Dateiname": "_Setup\sky\sun.dds"})
     ET.SubElement(
-        n_strecke,
-        "Datei",
-        {
-            "Dateiname": landschaft.conv_ls(ls_datei, no_displacement=True)[0],
-        },
+        nstrecke_skydome,
+        "SonneHorizontTex",
+        {"Dateiname": "_Setup\sky\sun_horizon.dds"},
     )
+    ET.SubElement(nstrecke_skydome, "MondTex", {"Dateiname": "_Setup\sky\moon.dds"})
+    ET.SubElement(nstrecke_skydome, "SternTex", {"Dateiname": "_Setup\sky\star.dds"})
 
+    print("Aufgleispunkte eintragen")
     aufgleispunkte = {}
     while not (refnr := f.readline()).startswith("#"):
         elem_nr = int(f.readline())
         aufgleispunkte[int(refnr)] = elem_nr
         beschr = f.readline().strip()
-        n_re = allocate_refpunkt(n_strecke, elem_nr, RefTyp.AUFGLEISPUNKT)
-        print(RefTyp.AUFGLEISPUNKT)
-        n_re.attrib["Info"] = beschr
+        nstrecke_re = allocate_refpunkt(nstrecke_strecke, elem_nr, RefTyp.AUFGLEISPUNKT)
+        # print(elem_nr, beschr, RefTyp.AUFGLEISPUNKT)
+        nstrecke_re.attrib["Info"] = beschr
 
-    while not f.readline().startswith("#"):
-        pass
+    print("Streckenstandorte eintragen")
+    while (str_stdort_y := readfloatstr(f)) :
+        str_stdort_x = readfloatstr(f)  # Streckenstandort y-Koordinate
+        str_stdort_z = readfloatstr(f)  # Streckenstandort z-Koordinate
+        str_lookat_y = str(
+            float(str_stdort_y) - 30 * math.sin(readfloat(f))
+        )  # Streckenstandort Drehung um y-Koordinate in rad
+        str_lookat_x = str(
+            float(str_stdort_x) - 30 * math.sin(readfloat(f))
+        )  # Streckenstandort Drehung um x-Koordinate in rad
+        str_lookat_z = str(
+            float(str_stdort_z) - 30 * math.sin(readfloat(f))
+        )  # Streckenstandort Drehung um z-Koordinate in rad
+        # str_up_x = str(float(str_stdort_x) + 2.0)
+        # str_up_y = str(float(str_stdort_y) + 2.0)
+        # str_up_z = str(float(str_stdort_z) + 2.0)
+        str_stdort_name = f.readline().strip()
+        # print("Streckenstandort:", str_stdort_name)
+        # nstrecke_stdort = ET.SubElement(nstrecke_strecke, "StreckenStandort", {"StrInfo": str_stdort_name})
+        # ET.SubElement(nstrecke_stdort, "p", {"X": str_stdort_x, "Y": str_stdort_y, "Z": str_stdort_z})
+        # ET.SubElement(nstrecke_stdort, "lookat", {"X": str_lookat_x, "Y": str_lookat_y, "Z": str_lookat_z})
+        # ET.SubElement(nstrecke_stdort, "up", {"X": str_up_x, "Y": str_up_y, "Z": str_up_z})
 
     while True:
-        elem_nr = f.readline()
-
-        if elem_nr == "":
+        hilf_string = f.readline()
+        if hilf_string == "":
             break
         else:
-            elem_nr = int(elem_nr)
-
-        n_str_element = ET.SubElement(n_strecke, "StrElement")
-        nodes[elem_nr] = n_str_element
-        n_str_element.attrib["Nr"] = str(elem_nr)
-        n_str_element.attrib["Anschluss"] = str(0xFF00)
-
-        # "Keine Fahrstraße einrichten" in Gegenrichtung -- sollte nicht notwendig sein,
-        # weil nicht der 3D-Editor die Fahrstraßen erzeugt, sondern dieses Skript.
-        if False:
-            n_gegen = ET.SubElement(n_str_element, "InfoGegenRichtung")
-            ET.SubElement(n_gegen, "Ereignis").attrib["Er"] = "21"
-            ET.SubElement(n_gegen, "Ereignis").attrib["Er"] = "22"
-            ET.SubElement(n_gegen, "Ereignis").attrib["Er"] = "45"
-
-        n_norm = ET.SubElement(n_str_element, "InfoNormRichtung")
-
-        # 32945,2  Kilometrierung in m
-        # +  Zählrichtung der Kilometrierung, zulässige Werte: + (aufsteigend), - (absteigend)
-        # Rehbergtunnel  Landschaftsbezeichnung, # wiederholt die Bezeichnung vom Vorgängerelement
-        # 3007  Ereignis, Codierung s. Ereignisse
-        # 3214,451  x-Anfangs-Standortkoordinate
-        # 318,345  y-Anfangs-Standortkoordinate
-        # 30,853  z-Anfangs-Standortkoordinate
-        # 3193,437  x-End-Standortkoordinate
-        # 312,234  y-End-Standortkoordinate
-        # 31,439  z-End-Standortkoordinate
-        # -0,0231  Überhöhung in rad
-        n_norm.attrib["km"] = str(readfloat(f) / 1000)
+            elementnr = int(hilf_string)
+        streckenelemente[elementnr] = {"Anschluss": 0xFF00}
+        streckenelemente[elementnr]["Normkm"] = round(readfloat(f) * 0.001, 6)
         if f.readline().strip() == "+":
-            n_norm.attrib["pos"] = "1"
-
-        f.readline()  # Landschaftsbezeichnung
-        er_nr = int(f.readline())
-        conv_ereignis(er_nr, n_norm)
-
-        n_g = ET.SubElement(n_str_element, "g")
-        n_g.attrib["X"] = readfloatstr(f)
-        n_g.attrib["Y"] = readfloatstr(f)
-        n_g.attrib["Z"] = readfloatstr(f)
-
-        n_b = ET.SubElement(n_str_element, "b")
-        n_b.attrib["X"] = readfloatstr(f)
-        n_b.attrib["Y"] = readfloatstr(f)
-        n_b.attrib["Z"] = readfloatstr(f)
-
-        n_str_element.attrib["Ueberh"] = readfloatstr(f)
-
+            streckenelemente[elementnr]["Normpos"] = 1
+        # Landschaftsbezeichnung
+        landschaftsbezeichnung = f.readline().strip()
+        # if len(landschaftsbezeichnung) > 1:
+        #     print(elementnr, landschaftsbezeichnung)
+        # Ereignis
+        ereignis = int(f.readline())
+        # x-Anfangs-Standortkoordinate
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["gx"] = hilf_float
+        # y-Anfangs-Standortkoordinate
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["gy"] = hilf_float
+        # z-Anfangs-Standortkoordinate
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["gz"] = hilf_float
+        # x-End-Standortkoordinate
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["bx"] = hilf_float
+        # y-End-Standortkoordinate
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["by"] = hilf_float
+        # z-End-Standortkoordinate
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["bz"] = hilf_float
+        # Überhöhung in rad
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["Ueberh"] = hilf_float
+        # Nummern der nachfolgenden Streckenelemente
         succ = [
             x
             for x in [int(f.readline()), int(f.readline()), int(f.readline())]
             if x != 0
         ]
-        for nr in succ:
-            ET.SubElement(n_str_element, "NachNorm").attrib["Nr"] = str(nr)
-
+        streckenelemente[elementnr]["NachNorm"] = succ
+        # Referenzpunkt für Weiche eintragen
         if len(succ) > 1:
-            allocate_refpunkt(n_strecke, elem_nr, RefTyp.WEICHE)
-
-        block = None
-        gleis = None
-
-        n_norm.attrib["vMax"] = str(readfloat(f) / 3.6)
+            allocate_refpunkt(nstrecke_strecke, elementnr, RefTyp.WEICHE)
+            # print(elementnr, get_ref_nr(elementnr, RefTyp.WEICHE), RefTyp.WEICHE)
+        # Zulässige Geschwindigkeit in km/h
+        hilf_float = readfloat(f)
+        if hilf_float != 0.0:
+            streckenelemente[elementnr]["NormvMax"] = hilf_float / 3.6
         f.readline()  # reserviert für spätere Funktionen
-        betrst = f.readline().strip()  # Name des Bahnsteigs oder der Betriebsstelle
-        if len(betrst) > 0:
-            ET.SubElement(n_norm, "Ereignis", {"Er": "6", "Beschr": betrst})
-        f.readline()  # Gibt an, ob Element eine besondere Lage hat
-        if f.readline().strip() == "15":
-            n_str_element.attrib["Volt"] = "2"
-            n_str_element.attrib["Drahthoehe"] = "5.4500"
+        # Name des Bahnsteigs oder der Betriebsstelle
+        betriebsstelle = f.readline().strip()
+        hilf_ereignis = conv_ereignis(ereignis, betriebsstelle)
+        if hilf_ereignis.nummer > 0:
+            NormEreignis = {}
+            NormEreignis["Er"] = hilf_ereignis.nummer
+            if len(hilf_ereignis.text) > 0:
+                NormEreignis["Beschr"] = hilf_ereignis.text
+            if hilf_ereignis.wert > 0.0:
+                NormEreignis["Wert"] = hilf_ereignis.wert
+            if "NormEreignis" in streckenelemente[elementnr]:
+                streckenelemente[elementnr]["NormEreignis"].append(NormEreignis)
+            else:
+                streckenelemente[elementnr]["NormEreignis"] = [NormEreignis]
+        if hilf_ereignis.nummer != 6 and len(hilf_ereignis.text) > 0:
+            NormEreignis = {}
+            NormEreignis["Er"] = 6
+            NormEreignis["Beschr"] = hilf_ereignis.text
+            if "NormEreignis" in streckenelemente[elementnr]:
+                streckenelemente[elementnr]["NormEreignis"].append(NormEreignis)
+            else:
+                streckenelemente[elementnr]["NormEreignis"] = [NormEreignis]
+        lage = f.readline().strip()  # Gibt an, ob Element eine besondere Lage hat
+        if "T" in lage:
+            streckenelemente[elementnr]["fkt"] = 1
+        # Spannung Oberleitung in kV (0: nicht elektrifiziert)
+        uol = f.readline().strip()
+        if uol == "15":
+            streckenelemente[elementnr]["Volt"] = 2
+        elif uol == "25":
+            streckenelemente[elementnr]["Volt"] = 3
 
-        if (fstrsig_x := readfloatstr(f)) is not None:
-            # Fahrstraßensignal wird in die Gegenrichtung des Elements eingebaut.
-            # So kommen einander Fahrstraßensignal und Kombisignal nicht in die Quere.
-            # Aktiviere "Fahrstraßensignal gilt für beide Fahrtrichtungen" und
-            # die BÜ-Steuerung. Fahrstraßensignale in Zusi 2 haben immer eine eingebaute BÜ-Steuerung.
-            fahrstrsignale.add(elem_nr)
-            n_gegen = ET.SubElement(n_str_element, "InfoGegenRichtung")
-            n_signal = ET.SubElement(n_gegen, "Signal")
-            n_signal.attrib["SignalFlags"] = "9"
-            allocate_refpunkt(n_strecke, elem_nr, RefTyp.SIGNAL_GEGENRICHTUNG)
-            boundingr = 0
+        # Ab hier Eintragen in die XML-Datei
 
-            n_p = ET.SubElement(n_signal, "p")
-            n_p.attrib["X"] = fstrsig_x
-            n_p.attrib["Y"] = readfloatstr(f)
-            n_p.attrib["Z"] = readfloatstr(f)
+        nstrecke_str_element = ET.SubElement(nstrecke_strecke, "StrElement")
+        nodes[elementnr] = nstrecke_str_element
+        nstrecke_str_element.attrib["Nr"] = str(elementnr)
+        if "Ueberh" in streckenelemente[elementnr]:
+            nstrecke_str_element.attrib["Ueberh"] = str(
+                streckenelemente[elementnr]["Ueberh"]
+            )
+        if "NormvMax" in streckenelemente[elementnr]:
+            nstrecke_str_element.attrib["spTrass"] = str(streckenelemente[elementnr]["NormvMax"])
+        else:
+            nstrecke_str_element.attrib["spTrass"] = "150.0"
+        if "Anschluss" in streckenelemente[elementnr]:
+            nstrecke_str_element.attrib["Anschluss"] = str(
+                streckenelemente[elementnr]["Anschluss"]
+            )
+        nstrecke_str_element.attrib["Oberbau"] = "Zusi 2"
+        nstrecke_g = ET.SubElement(nstrecke_str_element, "g")
+        if "gx" in streckenelemente[elementnr]:
+            nstrecke_g.attrib["X"] = str(streckenelemente[elementnr]["gx"])
+        if "gy" in streckenelemente[elementnr]:
+            nstrecke_g.attrib["Y"] = str(streckenelemente[elementnr]["gy"])
+        if "gz" in streckenelemente[elementnr]:
+            nstrecke_g.attrib["Z"] = str(streckenelemente[elementnr]["gz"])
+        nstrecke_b = ET.SubElement(nstrecke_str_element, "b")
+        if "bx" in streckenelemente[elementnr]:
+            nstrecke_b.attrib["X"] = str(streckenelemente[elementnr]["bx"])
+        if "by" in streckenelemente[elementnr]:
+            nstrecke_b.attrib["Y"] = str(streckenelemente[elementnr]["by"])
+        if "bz" in streckenelemente[elementnr]:
+            nstrecke_b.attrib["Z"] = str(streckenelemente[elementnr]["bz"])
+        nstrecke_norm = ET.SubElement(nstrecke_str_element, "InfoNormRichtung")
+        if "NormEreignis" in streckenelemente[elementnr]:
+            for i in range(len(streckenelemente[elementnr]["NormEreignis"])):
+                nstrecke_norm_er = ET.SubElement(
+                    nstrecke_norm,
+                    "Ereignis",
+                    {"Er": str(streckenelemente[elementnr]["NormEreignis"][i]["Er"])},
+                )
+                if "Beschr" in streckenelemente[elementnr]["NormEreignis"][i]:
+                    nstrecke_norm_er.attrib["Beschr"] = str(
+                        streckenelemente[elementnr]["NormEreignis"][i]["Beschr"]
+                    )
+                if "Wert" in streckenelemente[elementnr]["NormEreignis"][i]:
+                    nstrecke_norm_er.attrib["Wert"] = str(
+                        streckenelemente[elementnr]["NormEreignis"][i]["Wert"]
+                    )
+        if "Normkm" in streckenelemente[elementnr]:
+            nstrecke_norm.attrib["km"] = str(streckenelemente[elementnr]["Normkm"])
+        if "Normpos" in streckenelemente[elementnr]:
+            nstrecke_norm.attrib["pos"] = str(streckenelemente[elementnr]["Normpos"])
 
-            n_phi = ET.SubElement(n_signal, "phi")
-            n_phi.attrib["X"] = readfloatstr(f)
-            n_phi.attrib["Y"] = str(-readfloat(f))  # TODO warum?
-            n_phi.attrib["Z"] = readfloatstr(f)
+        if "NormvMax" in streckenelemente[elementnr]:
+            nstrecke_norm.attrib["vMax"] = str(streckenelemente[elementnr]["NormvMax"])
+        if "Volt" in streckenelemente[elementnr]:
+            nstrecke_str_element.attrib["Volt"] = str(
+                streckenelemente[elementnr]["Volt"]
+            )
+            if (
+                streckenelemente[elementnr]["Volt"] == 2
+                or streckenelemente[elementnr]["Volt"] == 3
+            ):
+                nstrecke_str_element.attrib["Drahthoehe"] = "5.4500"
 
+        # Ab hier Einlesen der Signalinformationen
+
+        signal = signalleer.copy()
+        if (string := f.readline().strip()) != "#":
+            signal["Vorhanden"] = True
+            signal["koord"].x = float(string.replace(",", "."))
+            signal["koord"].y = readfloat(f)
+            signal["koord"].z = readfloat(f)
+            signal["koord"].rx = readfloat(f)
+            signal["koord"].ry = readfloat(f)
+            signal["koord"].rz = readfloat(f)
             for i in range(6):
-                f.readline()
-
+                f.readline()  # ohne Funktion
             sigframe_statisch = f.readline().strip()
-            n_sigframe_statisch = ET.SubElement(n_signal, "SignalFrame")
             conv = landschaft.conv_ls(sigframe_statisch, no_displacement=True)
-            ET.SubElement(n_sigframe_statisch, "Datei").attrib[
-                "Dateiname"
-            ] = conv.dateiname_zusi
-            boundingr = max(boundingr, conv.boundingr)
-
+            signal["koord"].lsdatei = conv.dateiname_zusi
+            signal["BoundingR"] = max(signal["BoundingR"], conv.boundingr)
             f.readline()  # ohne Funktion
             if not (sigframe_nicht_gestellt := f.readline()).startswith("#"):
-                n_sigframe_nicht_gestellt = ET.SubElement(n_signal, "SignalFrame")
                 conv = landschaft.conv_ls(
                     sigframe_nicht_gestellt.strip(), no_displacement=True
                 )
-                ET.SubElement(n_sigframe_nicht_gestellt, "Datei").attrib[
-                    "Dateiname"
-                ] = conv.dateiname_zusi
-                boundingr = max(boundingr, conv.boundingr)
+                signal["ls0"] = conv.dateiname_zusi
+                signal["BoundingR"] = max(signal["BoundingR"], conv.boundingr)
                 f.readline()  # ohne Funktion
-
-                sigframe_gestellt = f.readline().strip()
-                n_sigframe_gestellt = ET.SubElement(n_signal, "SignalFrame")
-                conv = landschaft.conv_ls(sigframe_gestellt, no_displacement=True)
-                ET.SubElement(n_sigframe_gestellt, "Datei").attrib[
-                    "Dateiname"
-                ] = conv.dateiname_zusi
-                boundingr = max(boundingr, conv.boundingr)
+                conv = landschaft.conv_ls(f.readline().strip(), no_displacement=True)
+                signal["ls1"] = conv.dateiname_zusi
+                signal["BoundingR"] = max(signal["BoundingR"], conv.boundingr)
                 f.readline()  # ohne Funktion
-
                 f.readline()  # Signalbilder-Endmarke
+            signal["Ereignis"] = conv_ereignis(int(f.readline()), betriebsstelle)
+            signal["vsig"] = int(f.readline())  # Am Signal angekündigte Geschwindigkeit
+            signal["master"] = int(f.readline())
+            # Solange Zusi 3 keine Funktion für stationäre Zp9-Signale hat, werden die Zusi 2-Zp9-Signale gelöscht.
+            if signal["Ereignis"].nummer == 25:
+                signal = signalleer.copy()
 
-            fstrsig_er_nr = int(f.readline())  # TODO
+        # Ab hier Einlesen der Kombisignale
 
-            ET.SubElement(n_signal, "HsigBegriff", {"FahrstrTyp": "1"})
-
-            ET.SubElement(
-                n_signal,
-                "HsigBegriff",
-                {
-                    "HsigGeschw": "-1",
-                    "FahrstrTyp": "1",  # Fahrweg
-                },
-            )
-            ET.SubElement(n_signal, "VsigBegriff", {"VsigGeschw": "-1"})
-
-            me = ET.SubElement(
-                n_signal,
-                "MatrixEintrag",
-                {
-                    "MatrixGeschw": "-1",
-                    "Signalbild": "3",
-                },
-            )
-            conv_ereignis(fstrsig_er_nr, me)
-
-            me = ET.SubElement(
-                n_signal,
-                "MatrixEintrag",
-                {
-                    "MatrixGeschw": "-1",
-                    "Signalbild": "5",
-                },
-            )
-            conv_ereignis(fstrsig_er_nr, me)
-
-            n_signal.attrib["BoundingR"] = str(int(math.ceil(boundingr)))
-
-            f.readline()  # Am Signal angekündigte Geschwindigkeit
-            if (fstrsig_koppelsignal_element := int(f.readline())) != 0:
-                ET.SubElement(
-                    ET.SubElement(
-                        n_signal,
-                        "KoppelSignal",
-                        {
-                            "ReferenzNr": str(
-                                get_ref_nr(
-                                    fstrsig_koppelsignal_element,
-                                    RefTyp.SIGNAL_GEGENRICHTUNG,
-                                )
-                            )
-                        },
-                    ),
-                    "Datei",
-                    {"Dateiname": z3streckendateiname_rel, "NurInfo": "1"},
-                )
-
-        if (x1 := readfloat(f)) is not None:
-            # Kombisignal
+        Kombisignalvorhanden = False
+        if (x1 := readfloat(f)) is not None:  # x-Standortkoordinate 1
+            Kombisignalvorhanden = True
             sig = Signal()
-            n_signal = ET.SubElement(n_norm, "Signal")
-            boundingr = 0
+            sig.elnr = elementnr
 
-            y1 = readfloat(f)
-            z1 = readfloat(f)
-            rx1 = readfloatstr(f)
-            ry1 = readfloatstr(f)
-            rz1 = readfloatstr(f)
+            y1 = readfloat(f)  # y-Standortkoordinate 1
+            z1 = readfloat(f)  # z-Standortkoordinate 1
+            rx1 = readfloatstr(f)  # Drehung am Standort um x-Achse 1
+            ry1 = readfloatstr(f)  # Drehung am Standort um y-Achse 1
+            rz1 = readfloatstr(f)  # Drehung am Standort um z-Achse 1
 
-            x2 = readfloat(f)
-            y2 = readfloat(f)
-            z2 = readfloat(f)
-            rx2 = readfloatstr(f)
-            ry2 = readfloatstr(f)
-            rz2 = readfloatstr(f)
+            x2 = readfloat(f)  # x-Standortkoordinate 2
+            y2 = readfloat(f)  # y-Standortkoordinate 2
+            z2 = readfloat(f)  # z-Standortkoordinate 2
+            rx2 = readfloatstr(f)  # Drehung am Standort um x-Achse 2
+            ry2 = readfloatstr(f)  # Drehung am Standort um y-Achse 2
+            rz2 = readfloatstr(f)  # Drehung am Standort um z-Achse 2
 
             if not x1 and not y1 and not z1:
-                xorigin, yorigin, zorigin = x2, y2, z2
+                sig.koord.x, sig.koord.y, sig.koord.z = x2, y2, z2
             elif not x2 and not y2 and not z2:
-                xorigin, yorigin, zorigin = x1, y1, z1
+                sig.koord.x, sig.koord.y, sig.koord.z = x1, y1, z1
             else:
-                xorigin, yorigin, zorigin = (
-                    (x1 + x2) / 2.0,
-                    (y1 + y2) / 2.0,
-                    (z1 + z2) / 2.0,
-                )
+                sig.koord.x = (x1 + x2) / 2.0
+                sig.koord.y = (y1 + y2) / 2.0
+                sig.koord.z = (z1 + z2) / 2.0
 
-            ET.SubElement(
-                n_signal,
-                "p",
-                {
-                    "X": str(xorigin),
-                    "Y": str(yorigin),
-                    "Z": str(zorigin),
-                },
-            )
+            sig.koord.rx = 0.0
+            sig.koord.ry = 0.0
+            sig.koord.rz = 0.0
 
             # Erste .ls-Datei
             sigframes = []
             while not (lsdatei := f.readline().strip()).startswith("#"):
-                sig.anzahl_sigframes += 1
-                n_signalframe = ET.Element("SignalFrame")
-                sigframes.append(n_signalframe)
+                sigframekoordinate = Koordinate()
                 conv = landschaft.conv_ls(lsdatei, no_displacement=True)
-                ET.SubElement(
-                    n_signalframe, "Datei", {"Dateiname": conv.dateiname_zusi}
-                )
-                boundingr = max(boundingr, conv.boundingr)
+                sigframekoordinate.lsdatei = conv.dateiname_zusi
                 # Position
                 if f.readline().startswith("2"):
-                    ET.SubElement(
-                        n_signalframe,
-                        "p",
-                        {
-                            "X": str(x2 - xorigin),
-                            "Y": str(y2 - yorigin),
-                            "Z": str(z2 - zorigin),
-                        },
-                    )
-                    ET.SubElement(
-                        n_signalframe,
-                        "phi",
-                        {
-                            "X": str(rx2),
-                            "Y": str(ry2),
-                            "Z": str(rz2),
-                        },
-                    )
+                    sigframekoordinate.x = x2 - sig.koord.x
+                    sigframekoordinate.y = y2 - sig.koord.y
+                    sigframekoordinate.z = z2 - sig.koord.z
+                    sigframekoordinate.rx = rx2
+                    sigframekoordinate.ry = ry2
+                    sigframekoordinate.rz = rz2
                 else:
-                    ET.SubElement(
-                        n_signalframe,
-                        "p",
-                        {
-                            "X": str(x1 - xorigin),
-                            "Y": str(y1 - yorigin),
-                            "Z": str(z1 - zorigin),
-                        },
-                    )
-                    ET.SubElement(
-                        n_signalframe,
-                        "phi",
-                        {
-                            "X": str(rx1),
-                            "Y": str(ry1),
-                            "Z": str(rz1),
-                        },
-                    )
+                    sigframekoordinate.x = x1 - sig.koord.x
+                    sigframekoordinate.y = y1 - sig.koord.y
+                    sigframekoordinate.z = z1 - sig.koord.z
+                    sigframekoordinate.rx = rx1
+                    sigframekoordinate.ry = ry1
+                    sigframekoordinate.rz = rz1
+                sig.boundingr = max(sig.boundingr, (conv.boundingr + (sigframekoordinate.x ** 2 + sigframekoordinate.y ** 2 + sigframekoordinate.z ** 2) ** 0.5))
+                sig.sigframe.append(sigframekoordinate)
+            # Hinzufügen der Bilder des Signales
+            if signal["Vorhanden"]:
+                sig.boundingr = max(sig.boundingr, signal["BoundingR"])
+                # Signalframes eintragen
+                sigframekoordinate = Koordinate()
+                sigframekoordinate.lsdatei = signal["koord"].lsdatei
+                sigframekoordinate.x = signal["koord"].x - sig.koord.x
+                sigframekoordinate.y = signal["koord"].y - sig.koord.y
+                sigframekoordinate.z = signal["koord"].z - sig.koord.z
+                sigframekoordinate.rx = signal["koord"].rx
+                sigframekoordinate.ry = signal["koord"].ry
+                sigframekoordinate.rz = signal["koord"].rz
+                sig.boundingr = max(sig.boundingr, (signal["BoundingR"] + (sigframekoordinate.x ** 2 + sigframekoordinate.y ** 2 + sigframekoordinate.z ** 2) ** 0.5))
+                sig.sigframe.append(sigframekoordinate)
+                positionls = len(sig.sigframe) - 1
+                if len(signal["ls0"]) > 0:
+                    sigframekoordinate = Koordinate()
+                    sigframekoordinate.lsdatei = signal["ls0"]
+                    sigframekoordinate.x = signal["koord"].x - sig.koord.x
+                    sigframekoordinate.y = signal["koord"].y - sig.koord.y
+                    sigframekoordinate.z = signal["koord"].z - sig.koord.z
+                    sigframekoordinate.rx = signal["koord"].rx
+                    sigframekoordinate.ry = signal["koord"].ry
+                    sigframekoordinate.rz = signal["koord"].rz
+                    sig.sigframe.append(sigframekoordinate)
+                    sigframekoordinate = Koordinate()
+                    sigframekoordinate.lsdatei = signal["ls1"]
+                    sigframekoordinate.x = signal["koord"].x - sig.koord.x
+                    sigframekoordinate.y = signal["koord"].y - sig.koord.y
+                    sigframekoordinate.z = signal["koord"].z - sig.koord.z
+                    sigframekoordinate.rx = signal["koord"].rx
+                    sigframekoordinate.ry = signal["koord"].ry
+                    sigframekoordinate.rz = signal["koord"].rz
+                    sig.sigframe.append(sigframekoordinate)
 
-            sig.elnr = elem_nr
+            # Blockname
             sig.block = f.readline().strip()
+            # Gleis
             sig.gleis = f.readline().strip()
-
+            # Anzahl der Hauptsignalzeilen -1
             numzeilen = int(f.readline()) + 1
+            # Anzahl der Vorsignalspalten -1
             numspalten = int(f.readline()) + 1
 
             sig.matrix = []
 
+            # Hauptsignalgeschwindigkeiten
             seen_blocks = set()
+            vmax0 = False
+            vmaxm1 = False
             for i in range(0, numzeilen):
                 # Fahrziel-Block, Fahrziel-Gleis, vmax, #, #
                 mz = MatrixZeile()
+                # Blockname des Fahrziels
                 mz.block = f.readline().strip()
+                # Gleis des Fahrziels
                 mz.gleis = f.readline().strip()
                 if mz.block or mz.gleis:
                     assert f"{mz.block} {mz.gleis}" not in seen_blocks
                     seen_blocks.add(f"{mz.block} {mz.gleis}")
+                # zugeordnete Geschwindigkeit in km/h
                 mz.vmax = int(f.readline())
+                if mz.vmax == 0:
+                    vmax0 = True
+                # if mz.vmax == -1:
+                #     vmaxm1 = True
+                mz.fstrtyp = 6
                 sig.matrix.append(mz)
                 f.readline()
                 f.readline()
-
-                if True:  # mz.vmax == 0 or mz.block or mz.gleis:
-                    n_hsig_begriff = ET.SubElement(
-                        n_signal,
-                        "HsigBegriff",
-                        {
-                            "FahrstrTyp": "6",
-                            "HsigGeschw": "0" if mz.vmax == 0 else str(mz.vmax / 3.6),
-                        },
-                    )
-
-            # if any(mz.vmax == 0 for mz in sig.matrix):
-            #    ET.SubElement(n_norm, "Ereignis", {"Er":"29", "Beschr": f"{sig.block} {sig.gleis}"})
-
+            # Vorsignalgeschwindigkeiten in km/h
             for i in range(0, numspalten):
                 vsig_geschw = int(f.readline())
                 sig.vsig_geschw.append(vsig_geschw)
-                n_vsig_begriff = ET.SubElement(
-                    n_signal,
-                    "VsigBegriff",
-                    {
-                        "VsigGeschw": "-1"
-                        if vsig_geschw == -1
-                        else str(vsig_geschw / 3.6),
-                    },
-                )
 
             # Aus bei Hp0
             f.readline()
+
+            # Matrixeinträge
 
             for i in range(0, numzeilen):
                 mz = sig.matrix[i]
                 for j in range(0, numspalten):
                     me = MatrixEintrag()
+                    # Bildauswahl, bitweise codiert (64 bit Wert)
                     me.bild = int(f.readline())
+                    if signal["Vorhanden"]:
+                        me.bild += 2 ** positionls
+                        if len(signal["ls0"]) and sig.matrix[i].vmax == 0:
+                            me.bild += 2 ** (positionls + 1)
+                        else:
+                            me.bild += 2 ** (positionls + 2)
+                    ## Höchstgeschwindigkeit
                     me.vmax = int(f.readline())
-                    if me.vmax == 0 and sig.matrix[i].vmax != 0:
-                        print(
-                            f"Element {elem_nr}, Zeile {i}, Spalte {j}: v=0, aber Zeile v!=0",
-                            file=sys.stderr,
-                        )
+                    # if me.vmax == 0 and sig.matrix[i].vmax != 0:
+                    #     print(
+                    #         f"Element {streckenelement['Nr']}, Zeile {i}, Spalte {j}: v=0, aber Zeile v!=0",
+                    #         file=sys.stderr,
+                    #     )
+                    # ID
                     me.id = int(f.readline())
-                    me.er1 = int(f.readline())
-                    me.er2 = int(f.readline())
+                    # Ereignis 1
+                    me.er1 = conv_ereignis(int(f.readline()), betriebsstelle)
+                    # if me.er1.nummer > 0:
+                    #     print(elementnr, "1", me.er1)
+                    # Ereignis 2
+                    me.er2 = conv_ereignis(int(f.readline()), betriebsstelle)
+                    # if me.er2.nummer > 0:
+                    #     print(elementnr, "2", me.er2)
                     f.readline()
 
                     sig.matrix[i].spalten.append(me)
 
-                    if True:  # mz.vmax == 0 or mz.block or mz.gleis:
-                        n_me = ET.SubElement(
-                            n_signal,
-                            "MatrixEintrag",
-                            {
-                                "MatrixGeschw": "-1"
-                                if me.vmax == -1
-                                else str(me.vmax / 3.6),
-                                "Signalbild": str(me.bild),
-                            },
-                        )
+            if len(signal["ls0"]) and not vmax0:
+                mz = MatrixZeile()
+                mz.vmax = 0
+                mz.fstrtyp = 1
+                sig.matrix.append(mz)
+                for j in range(0, numspalten):
+                    me = MatrixEintrag()
+                    me.bild = (
+                        sig.matrix[0].spalten[j].bild
+                        + 2 ** (positionls + 1)
+                        - 2 ** (positionls + 2)
+                    )
+                    me.vmax = sig.matrix[0].spalten[j].vmax
+                    me.id = sig.matrix[0].spalten[j].id
+                    me.er1 = sig.matrix[0].spalten[j].er1
+                    me.er2 = sig.matrix[0].spalten[j].er2
+                    sig.matrix[i].spalten.append(me)
+
+            # Ersatzsignale
 
             ersatz_bild = int(f.readline())
             ersatz_vmax = int(f.readline())
@@ -641,7 +807,10 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
             ersatz_er1 = int(f.readline())
             ersatz_er2 = int(f.readline())
             ersatz_reserviert = f.readline()
-            f.readline()  # Wahrsch. Ersatzsignal
+            # Wahrscheinlichkeit Ersatzsignal
+            f.readline()
+
+            # Vorsignalstandorte
 
             vsig = f.readline()
             while not vsig.startswith("#"):
@@ -650,61 +819,323 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
 
             f.readline()  # reserviert
 
-            if sig.block != "" and sig.gleis != "":
-                n_signal.attrib["NameBetriebsstelle"] = sig.block
-                n_signal.attrib["Stellwerk"] = sig.block
-                n_signal.attrib["Signalname"] = sig.gleis
-                signale[elem_nr] = sig
+        # Eintragen des Signals als Kombisignal, wenn kein Kombisignal vorhanden ist.
+
+        if Kombisignalvorhanden == False and signal["Vorhanden"]:
+            fahrstrsignale.add(elementnr)
+            Kombisignalvorhanden = True
+            signal["Vorhanden"] = False
+            sig = Signal()
+            sig.elnr = elementnr
+            sig.koord.x = signal["koord"].x
+            sig.koord.y = signal["koord"].y
+            sig.koord.z = signal["koord"].z
+            sig.koord.rx = signal["koord"].rx
+            sig.koord.ry = signal["koord"].ry
+            sig.koord.rz = signal["koord"].rz
+            sig.boundingr = signal["BoundingR"]
+            # Signalframes eintragen
+            sigframes = []
+            sigframekoordinate = Koordinate()
+            sigframekoordinate.lsdatei = signal["koord"].lsdatei
+            sig.sigframe.append(sigframekoordinate)
+            if len(signal["ls0"]) > 0:
+                sigframekoordinate = Koordinate()
+                sigframekoordinate.lsdatei = signal["ls0"]
+                sig.sigframe.append(sigframekoordinate)
+                sigframekoordinate = Koordinate()
+                sigframekoordinate.lsdatei = signal["ls1"]
+                sig.sigframe.append(sigframekoordinate)
+                sig.sigflag = 4
+                sig.sigtyp = 5
             else:
-                n_signal.attrib["Signalname"] = f"Element {elem_nr}"
-                anonymesignale[elem_nr] = sig
+                sig.sigflag = 8
 
-            for sigframe in sigframes:
-                n_signal.append(sigframe)
+            # Matrixeinträge
+            if len(signal["ls0"]) > 0:
+                numzeilen = 2
+            else:
+                numzeilen = 1
+            numspalten = 1
+            # Hauptsignalgeschwindigkeiten
+            for i in range(0, numzeilen):
+                # Fahrziel-Block, Fahrziel-Gleis, vmax, #, #
+                mz = MatrixZeile()
+                # zugeordnete Geschwindigkeit in km/h
+                if numzeilen == 2 and i == 0:
+                    mz.vmax = 0
+                else:
+                    mz.vmax = -1
+                if len(signal["ls0"]) > 0:
+                    mz.fstrtyp = 2
+                else:
+                    mz.fstrtyp = 1
+                sig.matrix.append(mz)
+            # Vorsignalgeschwindigkeiten in km/h
+            for i in range(0, numspalten):
+                vsig_geschw = -1
+                sig.vsig_geschw.append(vsig_geschw)
 
-            n_signal.attrib["BoundingR"] = str(int(math.ceil(boundingr)))
+            # Matrixeinträge
+            for i in range(0, numzeilen):
+                mz = sig.matrix[i]
+                for j in range(0, numspalten):
+                    me = MatrixEintrag()
+                    # Bildauswahl, bitweise codiert (64 bit Wert)
+                    if numzeilen == 1:
+                        me.bild = 1
+                    elif i == 0:
+                        me.bild = 3
+                    else:
+                        me.bild = 5
+                    # Höchstgeschwindigkeit
+                    me.vmax = -1
+                    # Ereignis 1
+                    me.er1 = signal["Ereignis"]
+                    # Ereignis 2
+                    me.er2 = conv_ereignis(0, betriebsstelle)
 
-            allocate_refpunkt(n_strecke, elem_nr, RefTyp.SIGNAL)
+                    sig.matrix[i].spalten.append(me)
+
+            # sig.master = signal["master"]
+
+        # Kombissignale in XML-Datei eintragen
+
+        if Kombisignalvorhanden:
+            nstrecke_signal = ET.SubElement(nstrecke_norm, "Signal")
+            if sig.block != "" and sig.gleis != "":
+                nstrecke_signal.attrib["NameBetriebsstelle"] = sig.block
+                nstrecke_signal.attrib["Stellwerk"] = sig.block
+                nstrecke_signal.attrib["Signalname"] = sig.gleis
+                signale[elementnr] = sig
+            else:
+                nstrecke_signal.attrib["Signalname"] = f"Element {elementnr}"
+                anonymesignale[elementnr] = sig
+
+            if sig.koord.x != 0.0:
+                nstrecke_signal.attrib["SignalFlags"] = str(sig.sigflag)
+            if sig.koord.x != 0.0:
+                nstrecke_signal.attrib["SignalTyp"] = str(sig.sigtyp)
+            nstrecke_signal.attrib["BoundingR"] = str(int(math.ceil(sig.boundingr)))
+            nstrecke_p = ET.SubElement(nstrecke_signal, "p")
+            if sig.koord.x != 0.0:
+                nstrecke_p.attrib["X"] = str(sig.koord.x)
+            if sig.koord.y != 0.0:
+                nstrecke_p.attrib["Y"] = str(sig.koord.y)
+            if sig.koord.z != 0.0:
+                nstrecke_p.attrib["Z"] = str(sig.koord.z)
+            nstrecke_phi = ET.SubElement(nstrecke_signal, "phi")
+            if sig.koord.rx != 0.0:
+                nstrecke_phi.attrib["X"] = str(sig.koord.rx)
+            if sig.koord.ry != 0.0:
+                nstrecke_phi.attrib["Y"] = str(sig.koord.ry)  # TODO warum?
+            if sig.koord.rz != 0.0:
+                nstrecke_phi.attrib["Z"] = str(sig.koord.rz)
+
+            for i in range(len(sig.sigframe)):
+                nstrecke_signalframe = ET.SubElement(nstrecke_signal, "SignalFrame")
+                sigframes.append(nstrecke_signalframe)
+                ET.SubElement(
+                    nstrecke_signalframe,
+                    "p",
+                    {
+                        "X": str(sig.sigframe[i].x),
+                        "Y": str(sig.sigframe[i].y),
+                        "Z": str(sig.sigframe[i].z),
+                    },
+                )
+                ET.SubElement(
+                    nstrecke_signalframe,
+                    "phi",
+                    {
+                        "X": str(sig.sigframe[i].rx),
+                        "Y": str(sig.sigframe[i].ry),
+                        "Z": str(sig.sigframe[i].rz),
+                    },
+                )
+                ET.SubElement(
+                    nstrecke_signalframe,
+                    "Datei",
+                    {"Dateiname": sig.sigframe[i].lsdatei},
+                )
+            for i in range(0, len(sig.matrix)):
+                if True:  # mz.vmax == 0 or mz.block or mz.gleis:
+                    ET.SubElement(
+                        nstrecke_signal,
+                        "HsigBegriff",
+                        {
+                            "FahrstrTyp": str(mz.fstrtyp),
+                            "HsigGeschw": "-1"
+                            if sig.matrix[i].vmax == -1
+                            else str(sig.matrix[i].vmax / 3.6),
+                        },
+                    )
+
+            # if any(mz.vmax == 0 for mz in sig.matrix):
+            #    ET.SubElement(nstrecke_norm, "Ereignis", {"Er":"29", "Beschr": f"{sig.block} {sig.gleis}"})
+
+            for i in range(0, len(sig.vsig_geschw)):
+                ET.SubElement(
+                    nstrecke_signal,
+                    "VsigBegriff",
+                    {
+                        "VsigGeschw": "-1"
+                        if sig.vsig_geschw[i] == -1
+                        else str(sig.vsig_geschw[i] / 3.6),
+                    },
+                )
+            for i in range(0, len(sig.matrix)):
+                for j in range(0, len(sig.matrix[i].spalten)):
+                    if True:  # mz.vmax == 0 or mz.block or mz.gleis:
+                        nstrecke_me = ET.SubElement(
+                            nstrecke_signal,
+                            "MatrixEintrag",
+                            {
+                                "MatrixGeschw": "-1"
+                                if sig.matrix[i].spalten[j].vmax == -1
+                                else str(sig.matrix[i].spalten[j].vmax / 3.6),
+                                "Signalbild": str(sig.matrix[i].spalten[j].bild),
+                            },
+                        )
+                        if sig.matrix[i].spalten[j].er1.nummer > 0:
+                            nstrecke_me_er = ET.SubElement(
+                                nstrecke_me,
+                                "Ereignis",
+                                {"Er": str(sig.matrix[i].spalten[j].er1.nummer)},
+                            )
+                            if sig.matrix[i].spalten[j].er1.wert > 0:
+                                nstrecke_me_er.attrib["Wert"] = str(
+                                    sig.matrix[i].spalten[j].er1.wert
+                                )
+                        if sig.matrix[i].spalten[j].er2.nummer > 0:
+                            nstrecke_me_er = ET.SubElement(
+                                nstrecke_me,
+                                "Ereignis",
+                                {"Er": str(sig.matrix[i].spalten[j].er2.nummer)},
+                            )
+                            if sig.matrix[i].spalten[j].er2.wert > 0:
+                                nstrecke_me_er.attrib["Wert"] = str(
+                                    sig.matrix[i].spalten[j].er2.wert
+                                )
+
+            if sig.master != 0:
+                ET.SubElement(
+                    ET.SubElement(
+                        nstrecke_signal,
+                        "KoppelSignal",
+                        {
+                            "ReferenzNr": str(
+                                get_ref_nr(
+                                    sig.master,
+                                    RefTyp.SIGNAL
+                                )
+                            )
+                        },
+                    ),
+                    "Datei",
+                    {"Dateiname": z3streckendateiname_rel, "NurInfo": "1"},
+                )
+            # Referenzpunkt erzeugen
+
+            allocate_refpunkt(nstrecke_strecke, elementnr, RefTyp.SIGNAL)
 
         register = int(f.readline())
 
-        if er_nr == 3002:
-            allocate_refpunkt(n_strecke, elem_nr, RefTyp.AUFLOESEPUNKT)
+        streckenelemente[elementnr]["aufloesepunkt"] = False
 
-            if register == 0:
-                print(
-                    f"kein Register an Auflöseelement {elem_nr}, erfinde eins",
-                    file=sys.stderr,
-                )
-                register = regnr
-                regnr += 1
+        if "NormEreignis" in streckenelemente[elementnr]:
+            for i in range(len(streckenelemente[elementnr]["NormEreignis"])):
+               if streckenelemente[elementnr]["NormEreignis"][i]["Er"] == 4:
+                   streckenelemente[elementnr]["aufloesepunkt"] = True
+                   allocate_refpunkt(nstrecke_strecke, elementnr, RefTyp.AUFLOESEPUNKT)
 
-        if block is not None and gleis is not None:
-            elements[elem_nr]["block"] = block
-            elements[elem_nr]["gleis"] = gleis
+                   if register == 0:
+                       # print(
+                       #     f"kein Register an Auflöseelement {streckenelement['Nr']}, erfinde eins",
+                       #     file=sys.stderr,
+                       # )
+                       register = regnr
+                       regnr += 1
 
         if register != 0:
-            n_norm.attrib["Reg"] = str(register)
-            allocate_refpunkt(n_strecke, elem_nr, RefTyp.REGISTER)
+            nstrecke_norm.attrib["Reg"] = str(register)
+            allocate_refpunkt(nstrecke_strecke, elementnr, RefTyp.REGISTER)
 
-        elements[elem_nr] = {
-            "succ": succ,
-            "register": register,
-            "aufloesepunkt": er_nr == 3002,
-        }
+        streckenelemente[elementnr]["register"] = register
 
-    for elem_nr, element in elements.items():
-        for succ in element["succ"]:
-            ET.SubElement(nodes[succ], "NachGegen").attrib["Nr"] = str(elem_nr)
-            try:
-                preds = elements[succ]["pred"]
-            except KeyError:
-                elements[succ]["pred"] = [elem_nr]
-                continue
+        # if signal["Vorhanden"] and Kombisignalvorhanden and len(signal["ls0"]) > 0:
+        #     print(
+        #         "In Streckenelement ",
+        #         elementnr,
+        #         " sind Signal und Kombisignal vorhanden und das Signal ist zweibegriffig",
+        #     )
 
-            if len(preds) == 1:
-                allocate_refpunkt(n_strecke, succ, RefTyp.WEICHE_GEGENRICHTUNG)
-            preds.append(elem_nr)
+    # Streckenelementverbindung in Gegenrichtung ins Dictonary eintragen
+
+    print("Streckenelementverbindung in Gegenrichtung ins Dictonary eintragen")
+    for elem_nr, element in streckenelemente.items():
+        for succ in element["NachNorm"]:
+            if "NachGegen" in streckenelemente[succ]:
+                preds = streckenelemente[succ]["NachGegen"]
+                preds.append(elem_nr)
+            else:
+                streckenelemente[succ]["NachGegen"] = [elem_nr]
+
+    # Hier kommt die Berechnung der Krümmung hin!!!!
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Streckenelemente"
+    ws.cell(row=1, column=1).value = "Streckenelementnummer"
+    ws.cell(row=1, column=2).value = "x-Koordinate grün"
+    ws.cell(row=1, column=3).value = "y-Koordinate grün"
+    ws.cell(row=1, column=4).value = "z-Koordinate grün"
+    ws.cell(row=1, column=5).value = "x-Koordinate blau"
+    ws.cell(row=1, column=6).value = "y-Koordinate blau"
+    ws.cell(row=1, column=7).value = "z-Koordinate blau"
+    ws.cell(row=1, column=8).value = "Krümmung"
+    ws.cell(row=1, column=9).value = "Nach Norm"
+    ws.cell(row=1, column=10).value = "Nach Gegen"
+    i = 1
+    for elem_nr, element in streckenelemente.items():
+        i += 1
+        ws.cell(row=i, column=1).value = elem_nr
+        if "gx" in element:
+            ws.cell(row=i, column=2).value = element["gx"]
+        if "gy" in element:
+            ws.cell(row=i, column=3).value = element["gy"]
+        if "gz" in element:
+            ws.cell(row=i, column=4).value = element["gz"]
+        if "bx" in element:
+            ws.cell(row=i, column=5).value = element["bx"]
+        if "by" in element:
+            ws.cell(row=i, column=6).value = element["by"]
+        if "bz" in element:
+            ws.cell(row=i, column=7).value = element["bz"]
+        if "kr" in element:
+            ws.cell(row=i, column=8).value = element["kr"]
+        if "NachNorm" in element:
+            ws.cell(row=i, column=9).value = str(element["NachNorm"])
+        if "NachGegen" in element:
+            ws.cell(row=i, column=10).value = str(element["NachGegen"])
+        # print("Element: ",elem_nr ,element)
+
+    wb.save("strecke.xlsx")
+
+    # Streckenelementverbindungen in XML-Datei eintragen
+
+    print("Streckenelementverbindungen in XML-Datei eintragen")
+    for elem_nr, element in streckenelemente.items():
+        try:
+            for i in element["NachNorm"]:
+                ET.SubElement(nodes[elem_nr], "NachNorm").attrib["Nr"] = str(i)
+        except KeyError:
+            continue
+        try:
+            for i in element["NachGegen"]:
+                ET.SubElement(nodes[elem_nr], "NachGegen").attrib["Nr"] = str(i)
+        except KeyError:
+            continue
 
     # Fahrstraßen
 
@@ -736,14 +1167,13 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
 
         return spalte
 
-    def get_aufloesepunkte_rek(elnr, startnr, n_fahrstrasse):
+    def get_aufloesepunkte_rek(elnr, startnr, nstrecke_fahrstrasse):
         while True:
-            element = elements[elnr]
             if elnr != startnr:
-                if element["aufloesepunkt"]:
+                if streckenelemente[elnr]["aufloesepunkt"]:
                     ET.SubElement(
                         ET.SubElement(
-                            n_fahrstrasse,
+                            nstrecke_fahrstrasse,
                             "FahrstrAufloesung",
                             {"Ref": str(get_ref_nr(elnr, 5))},
                         ),
@@ -757,21 +1187,20 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
                     if any(mz.vmax == 0 for mz in sig.matrix):
                         break
 
-            succs = element["succ"]
+            succs = streckenelemente[elnr]["NachNorm"]
             if not succs:
                 break
             for idx in range(1, len(succs)):
-                get_aufloesepunkte_rek(startnr, succs[idx], n_fahrstrasse)
+                get_aufloesepunkte_rek(startnr, succs[idx], nstrecke_fahrstrasse)
             elnr = succs[0]
 
-    def get_fahrstr_rek(startnrs, elnr, n_fahrstrasse):
+    def get_fahrstr_rek(startnrs, elnr, nstrecke_fahrstrasse):
         while True:
-            element = elements[elnr]
             if elnr != startnrs[-1]:
-                if element["register"]:
+                if streckenelemente[elnr]["register"]:
                     ET.SubElement(
                         ET.SubElement(
-                            n_fahrstrasse,
+                            nstrecke_fahrstrasse,
                             "FahrstrRegister",
                             {"Ref": str(get_ref_nr(elnr, 2))},
                         ),
@@ -779,10 +1208,10 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
                         {"Dateiname": z3streckendateiname_rel, "NurInfo": "1"},
                     )
 
-                if element["aufloesepunkt"]:
+                if streckenelemente[elnr]["aufloesepunkt"]:
                     ET.SubElement(
                         ET.SubElement(
-                            n_fahrstrasse,
+                            nstrecke_fahrstrasse,
                             "FahrstrTeilaufloesung",
                             {"Ref": str(get_ref_nr(elnr, 5))},
                         ),
@@ -793,7 +1222,7 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
                 if elnr in fahrstrsignale:
                     ET.SubElement(
                         ET.SubElement(
-                            n_fahrstrasse,
+                            nstrecke_fahrstrasse,
                             "FahrstrSignal",
                             {
                                 "FahrstrSignalZeile": "1",
@@ -826,7 +1255,7 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
 
                         ET.SubElement(
                             ET.SubElement(
-                                n_fahrstrasse,
+                                nstrecke_fahrstrasse,
                                 "FahrstrSignal",
                                 {
                                     "FahrstrSignalZeile": str(zeile_v0),
@@ -845,7 +1274,7 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
 
                                 ET.SubElement(
                                     ET.SubElement(
-                                        n_fahrstrasse,
+                                        nstrecke_fahrstrasse,
                                         "FahrstrSignal",
                                         {
                                             "FahrstrSignalZeile": str(idx),
@@ -882,14 +1311,14 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
                                         try:
                                             vsig = anonymesignale[vsig_nr]
                                         except KeyError:
-                                            print(
-                                                f"Kein Vorsignal an Element {vsig_nr}"
-                                            )
+                                            # print(
+                                            #     f"Kein Vorsignal an Element {vsig_nr}"
+                                            # )
                                             continue
 
                                     ET.SubElement(
                                         ET.SubElement(
-                                            n_fahrstrasse,
+                                            nstrecke_fahrstrasse,
                                             "FahrstrVSignal",
                                             {
                                                 "FahrstrSignalSpalte": str(
@@ -912,7 +1341,7 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
                                         file=sys.stderr,
                                     )
                                     get_fahrstr_rek(
-                                        startnrs + [elnr], elnr, n_fahrstrasse
+                                        startnrs + [elnr], elnr, nstrecke_fahrstrasse
                                     )
                                     return
 
@@ -926,7 +1355,7 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
 
                         ET.SubElement(
                             ET.SubElement(
-                                n_fahrstrasse,
+                                nstrecke_fahrstrasse,
                                 "FahrstrZiel",
                                 {"Ref": str(get_ref_nr(elnr, 4))},
                             ),
@@ -941,27 +1370,27 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
                             except KeyError:
                                 fname += f"Aufgleispunkt -> "
                         fname += f"{sig.block} {sig.gleis}"
-                        n_fahrstrasse.attrib["FahrstrName"] = fname
+                        nstrecke_fahrstrasse.attrib["FahrstrName"] = fname
 
-                        get_aufloesepunkte_rek(elnr, elnr, n_fahrstrasse)
+                        get_aufloesepunkte_rek(elnr, elnr, nstrecke_fahrstrasse)
 
-                        n_fahrstrasse.attrib["FahrstrTyp"] = f"TypZug"
-                        n_strecke.append(n_fahrstrasse)
-                        print(f" -> {fname}", file=sys.stderr)
+                        nstrecke_fahrstrasse.attrib["FahrstrTyp"] = f"TypZug"
+                        nstrecke_strecke.append(nstrecke_fahrstrasse)
+                        # print(f" -> {fname}", file=sys.stderr)
                         break
 
-            succs = element["succ"]
+            succs = streckenelemente[elnr]["NachNorm"]
             for idx, succ in enumerate(succs):
                 if len(succs) == 1:
-                    n_fahrstrasse2 = n_fahrstrasse
+                    nstrecke_fahrstrasse2 = nstrecke_fahrstrasse
                 else:
-                    n_fahrstrasse2 = copy.deepcopy(n_fahrstrasse)
+                    nstrecke_fahrstrasse2 = copy.deepcopy(nstrecke_fahrstrasse)
 
-                succ_preds = elements[succ]["pred"]
+                succ_preds = streckenelemente[succ]["NachGegen"]
                 if len(succ_preds) > 1:
                     ET.SubElement(
                         ET.SubElement(
-                            n_fahrstrasse2,
+                            nstrecke_fahrstrasse2,
                             "FahrstrWeiche",
                             {
                                 "FahrstrWeichenlage": str(succ_preds.index(elnr) + 1),
@@ -980,47 +1409,49 @@ def conv_str(z2pfad, z2streckendateiname_rel, z3pfad, zielverzeichnis_rel):
                 else:
                     ET.SubElement(
                         ET.SubElement(
-                            n_fahrstrasse2,
+                            nstrecke_fahrstrasse2,
                             "FahrstrWeiche",
                             {
                                 "FahrstrWeichenlage": str(idx + 1),
-                                "Ref": str(get_ref_nr(elnr, 3)),
+                                "Ref": str(get_ref_nr(elnr, RefTyp.WEICHE)),
                             },
                         ),
                         "Datei",
                         {"Dateiname": z3streckendateiname_rel, "NurInfo": "1"},
                     )
-                    get_fahrstr_rek(startnrs, succ, n_fahrstrasse2)
+                    get_fahrstr_rek(startnrs, succ, nstrecke_fahrstrasse2)
             else:
                 break
 
     for elnr, sig in signale.items():
         if any(mz.vmax == 0 for mz in sig.matrix):
             # Hsig
-            print(f"{sig.block} {sig.gleis}", file=sys.stderr)
-            n_fahrstrasse = ET.Element("Fahrstrasse")
+            # print(f"{sig.block} {sig.gleis}", file=sys.stderr)
+            nstrecke_fahrstrasse = ET.Element("Fahrstrasse")
             ET.SubElement(
                 ET.SubElement(
-                    n_fahrstrasse, "FahrstrStart", {"Ref": str(get_ref_nr(elnr, 4))}
+                    nstrecke_fahrstrasse,
+                    "FahrstrStart",
+                    {"Ref": str(get_ref_nr(elnr, 4))},
                 ),
                 "Datei",
                 {"Dateiname": z3streckendateiname_rel, "NurInfo": "1"},
             )
-            get_fahrstr_rek([elnr], elnr, n_fahrstrasse)
+            get_fahrstr_rek([elnr], elnr, nstrecke_fahrstrasse)
 
     for elnr in aufgleispunkte.values():
-        print(f"Aufgleispunkt {elnr}", file=sys.stderr)
-        n_fahrstrasse = ET.Element("Fahrstrasse")
+        # print(f"Aufgleispunkt {elnr}", file=sys.stderr)
+        nstrecke_fahrstrasse = ET.Element("Fahrstrasse")
         ET.SubElement(
             ET.SubElement(
-                n_fahrstrasse,
+                nstrecke_fahrstrasse,
                 "FahrstrStart",
                 {"Ref": str(get_ref_nr(elnr, RefTyp.AUFGLEISPUNKT))},
             ),
             "Datei",
             {"Dateiname": z3streckendateiname_rel, "NurInfo": "1"},
         )
-        get_fahrstr_rek([elnr], elnr, n_fahrstrasse)
+        get_fahrstr_rek([elnr], elnr, nstrecke_fahrstrasse)
 
     print(f"writing {z3streckendateiname_abs}", file=sys.stderr)
     os.makedirs(os.path.dirname(z3streckendateiname_abs), exist_ok=True)

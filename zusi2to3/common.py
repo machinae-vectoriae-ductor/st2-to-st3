@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from datetime import datetime
 
 Z3ABS = r"C:\Users\Public\Documents\Zusi3"
 Z2ABS = r"C:\Program Files (x86)\Zusi"
@@ -36,3 +37,14 @@ def readfloatstr(f):
         return None
     else:
         return line.strip().replace(",", ".")
+
+
+def readposixtime(f):
+    line = f.readline()
+    if line.startswith("#"):
+        return None
+    else:
+        posixtime = datetime.fromtimestamp(
+            float(line.strip().replace(",", ".")) * 86400.0
+        ) - (datetime(1970, 1, 1) - datetime(1899, 12, 30))
+        return posixtime

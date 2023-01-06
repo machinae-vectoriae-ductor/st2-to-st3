@@ -75,10 +75,10 @@ def conv_ls_elemente(f, num_elemente, filename):
                 fout2_ls.write(str(z).replace(".", ","))
                 fout2_ls.write("\r\n")
             fout2_ls.write(f"{c}\r\n{cnight}\r\n{blink}\r\n0\r\n{typ}\r\n#\r\n#\r\n")
-        print(
-            f" - #elemente={len(elemente)} {centerx=} {centery=} boundingr={math.sqrt(inhalt_boundingr_sq)}",
-            file=sys.stderr,
-        )
+        # print(
+        #     f" - #elemente={len(elemente)} {centerx=} {centery=} boundingr={math.sqrt(inhalt_boundingr_sq)}",
+        #     file=sys.stderr,
+        # )
 
     return VerknParameter(
         outname_rel, centerx, centery, 0, 0, 0, 0, math.sqrt(inhalt_boundingr_sq)
@@ -92,7 +92,7 @@ def conv_ls(filename, no_displacement=False):
         + ".ls3"
     )
     outname_abs = common.z3rel_to_abs(outname_rel)
-    print(f"conv_ls {filename} -> {outname_abs}", file=sys.stderr)
+    # print(f"conv_ls {filename} -> {outname_abs}", file=sys.stderr)
     if no_displacement and os.path.exists(outname_abs):
         boundingr = 0
         with open(outname_abs) as f:
@@ -174,9 +174,9 @@ def conv_ls(filename, no_displacement=False):
                 # liest den Rest von f
                 verknuepfungen.append(conv_ls_elemente(f, num_elemente, filename))
 
-        print(f"conv_ls {filename}: verknuepfungen:", file=sys.stderr)
-        for verkn in verknuepfungen:
-            print(f" - {verkn}", file=sys.stderr)
+        # print(f"conv_ls {filename}: verknuepfungen:", file=sys.stderr)
+        # for verkn in verknuepfungen:
+        # print(f" - {verkn}", file=sys.stderr)
 
         if not len(verknuepfungen) or no_displacement:
             centerx = centery = 0
@@ -215,7 +215,7 @@ def conv_ls(filename, no_displacement=False):
         else:
             boundingr = 0
 
-        print(f"{centerx=} {centery=} {boundingr=}", file=sys.stderr)
+        # print(f"{centerx=} {centery=} {boundingr=}", file=sys.stderr)
         fout.write("</Landschaft>\n</Zusi>")
 
         return VerknParameter(outname_rel, centerx, centery, 0, 0, 0, 0, boundingr)
