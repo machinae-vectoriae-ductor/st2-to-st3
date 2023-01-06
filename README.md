@@ -9,15 +9,15 @@ Folgende Einschränkungen liegen an der Zusi 2-Datenbasis und sind nicht behebba
 
 Folgende Einschränkungen lassen sich möglicherweise noch beheben:
 - Zusi 2 hat einen großen Fahrzeugpark, der mit den Dateien tfz.xml und wagen.xml auf Zusi3 abgebildet werden soll. Dies ist bisher nur teilweise für die Triebfahrzeuge des 1978er Fahrplans der linken Rheinstrecke geschehen. Wenn das führende Fahrzeug nicht in der Übersetzungstabelle eingetragen ist, wird der Zug nicht in den Fahrplan aufgenommen. Bei Wagen ohne Übersetzung werden die Zusi 2-Modelle konvertiert. Für manche Zusi 2-Fahrzeuge gibt es auch kein Modell in Zusi 3.
-- Falls in Zusi 3 die Meldung erscheint, dass ein Zug zu lang zum Aufgleisen ist, sollte der Zug von Hand aus der Fahrplandatei gelöscht werden, da Zusi 3 beim Aufgleisversuch abzustürzen scheint.
-- Die Kurvenschienen sind Vielecke, denen der Zug in Zusi 3 exakt folgt, was zu einer sehr unruhigen Kurvenfahrt führen kann.
+- Falls in Zusi 3 die Meldung erscheint, dass ein Zug zu lang zum Aufgleisen ist, sollte der Zug per entsprechendem Eintrag in die strecekn.xml aus der Fahrplandatei gelöscht werden, da Zusi 3 beim Aufgleisversuch abzustürzen scheint.
+- Die Kurvenschienen sind Vielecke, denen der Zug in Zusi 3 exakt folgt, was zu einer sehr unruhigen Kurvenfahrt führen kann. Hier muss noch die Krümmung der Streckenelemnte bestimmt und eingetragen werden.
 - Die Farben der Landschaft werden von Zusi 3 leicht anders dargestellt.
-- Die Kombinationssignale flackern teilweise sinnlos. Dies scheint in Verbindung mit einem Ersatzsignal vorzukommen.
-- Die PZB geht nur sehr vereinzelt. LZB und GNT sind noch gar nicht implementiert.
-- Teilweise klappt die Weiterschaltung der Signale nicht, so dass die Züge stehen bleiben. Ein Zeitsprung führt sicher in diesen Zustand.
-- Die ortsfesten Zp9-Signale leuchten dauernd.
+- LZB und GNT sind noch nicht implementiert.
+- Teilweise klappt die Weiterschaltung der Signale nicht, so dass die Züge stehen bleiben.
+- Die ortsfesten Zp9-Signale werden nicht mit übernommen, da Zusi 3 damit (noch) nichts anfangen kann.
 - Teilweise laufen die Koordinaten der dargestellten Landschaft und der flexiblen Elemente darin, wie Züge und Signale, auseinander. Dadurch schweben Züge manchmal gut sichtbar über dem Gleis oder fahren leicht daneben. Indusi-Magnete liegen schon mal nicht an der richtigen Stelle.
-- Die Fahrplandarstellung zeigt noch keine Sbk-Signale und keine Ende-Zeichen des anschließenden Weichenbereichs. Auch die Darstellung des verkürzten Vorsignalabstands und der Signalgeschwindigkeiten sind noch nicht korrekt.
+- Die Fahrplandarstellung zeigt noch keine Ende-Zeichen des anschließenden Weichenbereichs.
 - Züge mit Zugwende werden nur bis zur Zugwende konvertiert.
 - Es lassen sich nur Strecken mit der Datei-Version 2.3 konvertieren.
+- Bahnübergänge und Gleissperrsignale werden nicht bedient.
 - Es wurden nur die Strecken "Linke Rheinstrecke" und "Eifel" getestet.

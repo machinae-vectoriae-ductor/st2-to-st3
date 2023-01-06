@@ -26,9 +26,9 @@
  <!-- <Strecke Streckendatei="DessauRosslau\Version_2_5\MedewitzBitterfeld.str" Zielverzeichnis="Deutschland\Zusi2_DessauRosslau"> -->
   <!-- <Fahrplan Fahrplandatei="DessauRosslau\Version_2_5\"/> -->
  <!-- </Strecke> -->
- <!-- <Strecke Streckendatei="Eifel\Eifelstrecke.str" Zielverzeichnis="Deutschland\Zusi2_Eifel"> -->
-  <!-- <Fahrplan Fahrplandatei="Eifel\Eifelstrecke.fpl" /> -->
- <!-- </Strecke> -->
+ <Strecke Streckendatei="Eifel\Eifelstrecke.str" Zielverzeichnis="Deutschland\Zusi2_Eifel">
+  <Fahrplan Fahrplandatei="Eifel\Eifelstrecke.fpl" />
+ </Strecke>
  <!-- <Strecke Streckendatei="Freilassing-Berchtesgaden\Freilassing-Berchtesgaden.str" Zielverzeichnis="Deutschland\Zusi2_Freilassing-Berchtesgaden"> -->
   <!-- <Fahrplan Fahrplandatei="Freilassing-Berchtesgaden\1995 vormittags.fpl"/> -->
  <!-- </Strecke> -->
@@ -52,10 +52,13 @@
  <!-- <Strecke Streckendatei="Limburg-Westerburg\Limburg-Westerburg.str" Zielverzeichnis="Deutschland\Zusi2_Limburg-Westerburg"> -->
   <!-- <Fahrplan Fahrplandatei="Limburg-Westerburg\Sommer 2007-DB.fpl"/> -->
  <!-- </Strecke> -->
- <Strecke Streckendatei="LinkeRheinstrecke\LinkeRheinstrecke1987_V2_62.str" Zielverzeichnis="Deutschland\Zusi2_LinkeRheinstrecke">
-  <Fahrplan Fahrplandatei="LinkeRheinstrecke\1978_Sommer_17-23Uhr.fpl"/>
+ <!-- <Strecke Streckendatei="LinkeRheinstrecke\LinkeRheinstrecke1987_V2_62.str" Zielverzeichnis="Deutschland\Zusi2_LinkeRheinstrecke"> -->
+  <!-- <Fahrplan Fahrplandatei="LinkeRheinstrecke\1978_Sommer_17-23Uhr.fpl"> -->
+   <!-- <IgnorierterZug Zugnummer="1522"/> -->
+   <!-- <IgnorierterZug Zugnummer="3530"/> -->
+  <!-- </Fahrplan> -->
   <!-- <Fahrplan Fahrplandatei="LinkeRheinstrecke\2008_Winter_10-16Uhr.fpl"/> -->
- </Strecke>
+ <!-- </Strecke> -->
  <!-- <Strecke Streckendatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\" Zielverzeichnis="Deutschland\Zusi2_Main-Weser-Bahn"> -->
   <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\Fahrplan 2006 8-16 Uhr.fpl"/> -->
   <!-- <Fahrplan Fahrplandatei="Main-Weser-Bahn GI-FB\Streckenversion_V8\Fahrplan 2006 16-24 Uhr.fpl"/> -->

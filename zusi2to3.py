@@ -43,9 +43,21 @@ for ikonv in range(len(nkonv_root)):
                 z3pfad,
                 zielverzeichnis_rel,
             )
+            ignorzug = []
             for jkonv in range(len(nkonv_root[ikonv])):
                 if "Fahrplan" in nkonv_root[ikonv][jkonv].tag:
                     if "Fahrplandatei" in nkonv_root[ikonv][jkonv].attrib:
+                        for kkonv in range(len(nkonv_root[ikonv][jkonv])):
+                            if "IgnorierterZug" in nkonv_root[ikonv][jkonv][kkonv].tag:
+                                if (
+                                    "Zugnummer"
+                                    in nkonv_root[ikonv][jkonv][kkonv].attrib
+                                ):
+                                    ignorzug.append(
+                                        nkonv_root[ikonv][jkonv][kkonv].attrib[
+                                            "Zugnummer"
+                                        ]
+                                    )
                         fahrplan.conv_fpn(
                             z2pfad,
                             nkonv_root[ikonv][jkonv].attrib["Fahrplandatei"],
@@ -53,4 +65,5 @@ for ikonv in range(len(nkonv_root)):
                             z3pfad,
                             zielverzeichnis_rel,
                             rekursionstiefe,
+                            ignorzug,
                         )
